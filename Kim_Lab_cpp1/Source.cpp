@@ -10,6 +10,15 @@ struct Pipe {
 
 };
 
+struct Station {
+    int id;
+    std::string name;
+    int number_of_workshops;
+    int number_of_working_workshops;
+    int Efficiency;
+
+};
+
     
 
 void Output(Pipe& p)
@@ -43,51 +52,64 @@ int main()
     int station_counter = 0;
     int choose;
 
-    while (true) {
+    bool menu = true;
+
+    while (menu) {
+
+        std::cout << "start\n";
         std::cin >> choose;
 
-        switch (choose) {
-        
-        case 0:
-            break;
+        //  !isdigit(choose)
+        //  std::cin.fail()
+        if (!std::cin.fail() && choose >= 0 && choose <= 7) {
 
-        case 1:
-            Pipe p1 = AddPipe(pipe_counter);
-            break;
+            switch (choose) {
 
-        case 2:
-            //  AddStation(station_counter;
-            break;
+            case 0:
+                std::cout << "\nExit\n";
+                menu = false;
+                break;
 
-        case 3:
-            //  Output(vector);
-            break;
+            case 1:
+                Pipe p1 = AddPipe(pipe_counter);
+                std::cout << 213;
+                break;
 
-        case 4:
-            //  Editing(int id);
-            break;
+            case 2:
+                std::cout << "AddStation\n";
+                //  AddStation(station_counter);
+                break;
 
-        case 5:
-            break;
+            case 3:
+                std::cout << "Output\n";
+                //  Output(vector);
+                break;
 
-        case 6:
-            break;
-            
-        case 7:
-            break;
+            case 4:
+                std::cout << "Editing\n";
+                //  Editing(int id);
+                break;
 
-        default:
-            break;
+            case 5:
+                break;
+
+            case 6:
+                break;
+
+            case 7:
+                break;
+
+            default:
+                break;
+            }
         }
 
+        else {
+            std::cout << "The entered data is incorrect\n" << "Input new value:\n";
+            continue;
+        }
 
-
-        Output(p1);
-
-
-
-        counter++;
-        break;
+        //break;
     }
     return 0;
 }
