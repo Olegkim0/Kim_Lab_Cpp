@@ -1,7 +1,6 @@
 #include <iostream>
-#include <limits>
 #include <string>
-
+#include <fstream>
 
 struct Pipe {
     int id;
@@ -139,7 +138,6 @@ Station StationEdit(Station s) {
     return s;
 }
 
-
 void Output(Pipe& p)
 {
     std::cout << "\nOutput Pipe(s)";
@@ -155,6 +153,42 @@ void Output(Station& s) {
     std::cout << "\nnumber of workshops: " << s.number_of_workshops;
     std::cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
     std::cout << "\nEfficiency: " << s.Efficiency << "\n";
+}
+
+void Save(Pipe p, Station s){
+    std::ofstream file;
+    file.open("database.txt");
+    // if(arrayStation.length() != 0) {}
+    // for (int i; i < arrayStation.length(); i++){}
+
+    if (file.good()) {
+
+    if (p.length > 0) {
+        file << "Pipe: \n";
+        file << "p.id: " << p.id << "\n";
+        file << "p.diameter: " << p.diameter << "\n";
+        file << "p.length: " << p.length << "\n";
+        file << "p.isWorking: " << p.isWorking << "\n";
+    }
+
+    if (s.name != "") {
+        file << "\nStation: \n";
+        file << "s.id: " << s.id << "\n";
+        file << "s.name: " << s.name << "\n";
+        file << "s.number_of_workshops: " << s.number_of_workshops << "\n";
+        file << "s.number_of_working_workshops: " << s.id << "\n";
+        file << "s.Efficiency: " << s.Efficiency << "\n";
+        }
+
+    file.close();
+    std::cout << "Saved\n";
+    }
+
+    
+}
+
+void Load(Pipe& p, Station& s) {
+
 }
 
 int main()
@@ -203,7 +237,7 @@ int main()
             break;
 
         case 6:
-            //Save();
+            Save(p1, s1);
             break;
 
         case 7:
