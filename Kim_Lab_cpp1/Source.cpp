@@ -2,248 +2,229 @@
 #include <string>
 #include <fstream>
 
+using namespace std;
+
+void printMenu() {
+    cout << "\nMenu:\n";
+    cout << "1. Add pipe\n";
+    cout << "2. Add station\n";
+    cout << "3. Output\n";
+    cout << "4. Edit pipe\n";
+    cout << "5. Edit station\n";
+    cout << "6. Save\n";
+    cout << "7. Load\n";
+    cout << "0. Exit\n\n";
+}
+
+int input() {
+    string str;
+    cin.ignore();
+    cin >> str;
+    if (str.find_first_not_of("0123456789") != string::npos) {
+        cout << "Wrong input\n";
+        cout << "Try again: \n";
+    }
+    else {
+        return stoi(str);
+    }
+    return -1;
+}
+
 struct Pipe {
     int id;
     int diameter;
     int length;
-    bool isWorking;
+    bool isWorking = true;
 };
 
 Pipe AddPipe(int id)
 {
-    std::cout << "Adding Pipe\n";
-
+    cout << "Adding Pipe\n";
     Pipe p;
 
-    std::cout << "Input diameter:\n";
+    cout << "Input diameter:\n";
     p.diameter = 0;
-
-    while (p.diameter <= 0) {
-        std::string str_diameter;
-        std::cin.ignore();
-        std::cin >> str_diameter;
-        if (str_diameter.find_first_not_of("0123456789") != std::string::npos) {
-            std::cout << "The input contains not only digits\n";
-            std::cout << "Try again: \n";
-        }
-        else {
-            p.diameter = std::stoi(str_diameter);
-        }
+    while (p.diameter <= 0) {    
+        p.diameter = input();
     }
 
-    std::cout << "Input length:\n";
+    cout << "Input length:\n";
     p.length = 0;
-
     while (p.length <= 0) {
-        std::string str_length;
-        std::cin.ignore();
-        std::cin >> str_length;
-        if (str_length.find_first_not_of("0123456789") != std::string::npos) {
-            std::cout << "The input contains not only digits\n";
-            std::cout << "Try again: \n";
-        }
-        else {
-            p.length = std::stoi(str_length);
-        }
+        p.length = input();
     }
-
     return p;
 }
 
-Pipe PipeEdit(Pipe p) {
-    std::cout << "Pipe edited\n";
+Pipe PipeEdit(Pipe& p) {
     p.isWorking = !p.isWorking;
-    std::cout << "Is pipe working? " << p.isWorking << "\n";
+    cout << "Pipe edited\n";
+    cout << "Is pipe working? " << p.isWorking << "\n";
     return p;
 }
 
 struct Station {
     int id;
-    std::string name;
+    string name;
     int number_of_workshops;
     int number_of_working_workshops;
     int Efficiency;
 };
 
 Station AddStation(int id) {
-
-    std::cout << "Adding Station\n";
-
+    cout << "Adding Station\n";
     Station s;
 
-    std::cout << "Input name:\n";
-    std::cin >> s.name;
+    cout << "Input name:\n";
+    cin >> s.name;
 
-    std::cout << "Input number of workshops:\n";
+    cout << "Input number of workshops:\n";
     s.number_of_workshops = 0;
     while (s.number_of_workshops <= 0) {
-        std::string str_number_of_workshop;
-        std::cin.ignore();
-        std::cin >> str_number_of_workshop;
-        if (str_number_of_workshop == "0") {
-            std::cout << "Wrong input";
-        }
-        if (str_number_of_workshop.find_first_not_of("0123456789") != std::string::npos) {
-            std::cout << "The input contains not only digits\n";
-            std::cout << "Try again: \n";
-        }
-        else {
-            s.number_of_workshops = std::stoi(str_number_of_workshop);
-        }
+        s.number_of_workshops = input();
     }
 
-    std::cout << "Input number of working workshops:\n";
+    cout << "Input number of working workshops:\n";
     s.number_of_working_workshops = -1;
     while (s.number_of_working_workshops < 0 || s.number_of_working_workshops > s.number_of_workshops) {
-        std::string str_number_of_working_workshops;
-        std::cin.ignore();
-        std::cin >> str_number_of_working_workshops;
-
-        if (str_number_of_working_workshops.find_first_not_of("0123456789") != std::string::npos) {
-            std::cout << "Wrong input\n";
-            std::cout << "Try again: \n";
-            continue;
-        }
-        else {
-            s.number_of_working_workshops = std::stoi(str_number_of_working_workshops);
-        }
-
+        s.number_of_working_workshops = input();
         if (s.number_of_working_workshops > s.number_of_workshops) {
-            std::cout << "number of working workshops > number of workshops\n";
+            cout << "Wrong input\n";
+            cout << "Try again:\n";
         }
     }
 
-
-    std::cout << "Input Efficiency (0 < e <= 100):\n";
+    cout << "Input Efficiency (0 < e <= 100):\n";
     s.Efficiency = 0;
     while (s.Efficiency <= 0 || s.Efficiency > 100) {
-        std::string str_Efficiency;
-        std::cin.ignore();
-        std::cin >> str_Efficiency;
-        if (str_Efficiency.find_first_not_of("0123456789") != std::string::npos) {
-            std::cout << "The input contains not only digits\n";
-            std::cout << "Try again: \n";
-        }
-        else {
-            s.Efficiency = std::stoi(str_Efficiency);
+        s.Efficiency = input();
+    }
+    return s;
+}
+
+void StationEdit(Station& s) {
+    cout << "Editing station\n";
+    cout << "Input number of working workshops:\n";
+    s.number_of_working_workshops = -1;
+    while (s.number_of_working_workshops < 0 || s.number_of_working_workshops > s.number_of_workshops) {
+        s.number_of_working_workshops = input();
+        if (s.number_of_working_workshops > s.number_of_workshops) {
+            cout << "Wrong input\n";
+            cout << "Try again:\n";
         }
     }
-
-    return s;
 }
 
-Station StationEdit(Station s) {
-    std::cout << "Editing station\n";
-    std::cin >> s.number_of_working_workshops;
-    return s;
-}
-
-void Output(Pipe& p)
+void Output(Pipe p, Station s)
 {
-    std::cout << "\nOutput Pipe(s)";
-    std::cout << "\nId: " << p.id;
-    std::cout << "\nDiameter: " << p.diameter;
-    std::cout << "\nLength: " << p.length << "\n";
+    cout << "Output\n";
+    if (p.length > 0) {
+        cout << "\nOutput Pipe(s)";
+        cout << "\nId: " << p.id;
+        cout << "\nDiameter: " << p.diameter;
+        cout << "\nLength: " << p.length << "\n";
+    }
+    if (s.name != "") {
+        cout << "\nOutput station(s)";
+        cout << "\nId: " << s.id;
+        cout << "\nname: " << s.name;
+        cout << "\nnumber of workshops: " << s.number_of_workshops;
+        cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
+        cout << "\nEfficiency: " << s.Efficiency << "\n";
+    }
 }
 
-void Output(Station& s) {
-    std::cout << "\nOutput station(s)";
-    std::cout << "\nId: " << s.id;
-    std::cout << "\nname: " << s.name;
-    std::cout << "\nnumber of workshops: " << s.number_of_workshops;
-    std::cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
-    std::cout << "\nEfficiency: " << s.Efficiency << "\n";
-}
-
-void Save(Pipe p, Station s){
-    std::ofstream file;
+void Save(Pipe p, Station s) {
+    ofstream file;
     file.open("database.txt");
     // if(arrayStation.length() != 0) {}
     // for (int i; i < arrayStation.length(); i++){}
-
     if (file.good()) {
-
-    if (p.length > 0) {
-        file << "Pipe: \n";
-        file << "p.id: " << p.id << "\n";
-        file << "p.diameter: " << p.diameter << "\n";
-        file << "p.length: " << p.length << "\n";
-        file << "p.isWorking: " << p.isWorking << "\n";
-    }
-
-    if (s.name != "") {
-        file << "\nStation: \n";
-        file << "s.id: " << s.id << "\n";
-        file << "s.name: " << s.name << "\n";
-        file << "s.number_of_workshops: " << s.number_of_workshops << "\n";
-        file << "s.number_of_working_workshops: " << s.id << "\n";
-        file << "s.Efficiency: " << s.Efficiency << "\n";
+        if (p.length > 0) {
+            file << "Pipe:\n";
+            file << p.id << "\n";
+            file << p.diameter << "\n";
+            file << p.length << "\n";
+            file << p.isWorking << "\n";
         }
-
-    file.close();
-    std::cout << "Saved\n";
+        if (s.name != "") {
+            file << "Station:\n";
+            file << s.id << "\n";
+            file << s.name << "\n";
+            file << s.number_of_workshops << "\n";
+            file << s.number_of_working_workshops << "\n";
+            file << s.Efficiency;
+        }
+        file.close();
+        cout << "Saved\n";
     }
-
-    
 }
 
 void Load(Pipe& p, Station& s) {
-
+    ifstream file;
+    file.open("database.txt");
+    if (file.good()) {
+        while (!file.eof()) {
+            string type;
+            file >> type;
+            if (type == "Pipe:") {
+                file >> p.id;
+                file >> p.diameter;
+                file >> p.length;
+                file >> p.isWorking;
+            }
+            if (type == "Station:") {
+                file >> s.id;
+                file >> s.name;
+                file >> s.number_of_workshops;
+                file >> s.number_of_working_workshops;
+                file >> s.Efficiency;
+            }
+        }
+    }
+    cout << "Loaded\n";
 }
 
 int main()
 {
-    int pipe_counter = 0;
-    int station_counter = 0;
-    int choose;
-    Station s1;
     Pipe p1;
+    p1.length = -1;  // костыль
+    Station s1;
+    s1.name = "";  // костыль
     bool menu = true;
-
     while (menu) {
-
-        std::cout << "menu\n";
-
+        printMenu();
         int choose;
-        std::cin >> choose;
-
+        cin >> choose;
         switch (choose) {
         case 0:
-            std::cout << "\nExit\n";
+            cout << "\nExit\n";
             menu = false;
             break;
-
         case 1:
-            p1 = AddPipe(pipe_counter);
+            p1 = AddPipe(0);
             break;
-
         case 2:
-            s1 = AddStation(station_counter);
+            s1 = AddStation(0);
             break;
-
         case 3:
             // if (vector_of_Pipes.length != 0){}
-            Output(p1);
+            Output(p1, s1);
             // if (vector_of_Station.length != 0){}
-            Output(s1);
             break;
-
         case 4:
             PipeEdit(p1);
             break;
-
         case 5:
             StationEdit(s1);
             break;
-
         case 6:
+            // При первом сейве сделать проверку на vector.length 
             Save(p1, s1);
             break;
-
         case 7:
-            //Load();
+            Load(p1, s1);
             break;
-
         default:
             break;
         }
