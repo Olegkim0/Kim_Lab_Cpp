@@ -16,7 +16,7 @@ void printMenu() {
     cout << "0. Exit\n\n";
 }
 
-int input() {
+int input_integer() {
     string str;
     cin.ignore();
     cin >> str;
@@ -30,12 +30,30 @@ int input() {
     return -1;
 }
 
+double input_double() {
+    string str;
+    cin.ignore();
+    cin >> str;
+    if (str.find_first_not_of("0123456789.") != string::npos || str.length() == count(str.begin(), str.end(), '.')) {
+        cout << "Wrong input\n";
+        cout << "Try again: \n";
+    }
+    else {
+        return stod(str);
+    }
+    return -1;
+}
+
 struct Pipe {
-    int id;
+    int id = 0;
     int diameter;
-    int length;
+    double length;
     bool isWorking = true;
 };
+
+bool PiExists(const Pipe& p) {
+    return p.id != -1;
+}
 
 Pipe AddPipe(int id)
 {
@@ -45,31 +63,41 @@ Pipe AddPipe(int id)
     cout << "Input diameter:\n";
     p.diameter = 0;
     while (p.diameter <= 0) {    
-        p.diameter = input();
+        p.diameter = input_integer();
     }
 
     cout << "Input length:\n";
     p.length = 0;
     while (p.length <= 0) {
-        p.length = input();
+        p.length = input_double();
     }
     return p;
 }
 
-Pipe PipeEdit(Pipe& p) {
-    p.isWorking = !p.isWorking;
-    cout << "Pipe edited\n";
-    cout << "Is pipe working? " << p.isWorking << "\n";
-    return p;
+void PipeEdit(Pipe& p) {
+    // if (array_of_pipes != 0) {}
+    if (PiExists(p)) {
+        p.isWorking = !p.isWorking;
+        cout << "Pipe edited\n";
+        cout << "Is pipe working? " << p.isWorking << "\n";
+    }
+    else {
+        cout << "\nNo pipes\n";
+    }
 }
 
 struct Station {
-    int id;
+    int id = 0;
     string name;
     int number_of_workshops;
     int number_of_working_workshops;
     int Efficiency;
 };
+
+bool StExists(const Station& s)
+{
+    return s.id != -1;;
+}
 
 Station AddStation(int id) {
     cout << "Adding Station\n";
@@ -81,13 +109,13 @@ Station AddStation(int id) {
     cout << "Input number of workshops:\n";
     s.number_of_workshops = 0;
     while (s.number_of_workshops <= 0) {
-        s.number_of_workshops = input();
+        s.number_of_workshops = input_integer();
     }
 
     cout << "Input number of working workshops:\n";
     s.number_of_working_workshops = -1;
     while (s.number_of_working_workshops < 0 || s.number_of_working_workshops > s.number_of_workshops) {
-        s.number_of_working_workshops = input();
+        s.number_of_working_workshops = input_integer();
         if (s.number_of_working_workshops > s.number_of_workshops) {
             cout << "Wrong input\n";
             cout << "Try again:\n";
@@ -97,33 +125,41 @@ Station AddStation(int id) {
     cout << "Input Efficiency (0 < e <= 100):\n";
     s.Efficiency = 0;
     while (s.Efficiency <= 0 || s.Efficiency > 100) {
-        s.Efficiency = input();
+        s.Efficiency = input_integer();
     }
     return s;
 }
 
 void StationEdit(Station& s) {
-    cout << "Editing station\n";
-    cout << "Input number of working workshops:\n";
-    s.number_of_working_workshops = -1;
-    while (s.number_of_working_workshops < 0 || s.number_of_working_workshops > s.number_of_workshops) {
-        s.number_of_working_workshops = input();
-        if (s.number_of_working_workshops > s.number_of_workshops) {
-            cout << "Wrong input\n";
-            cout << "Try again:\n";
+    // if (array_of_stations != 0){}
+    if (StExists(s)) {
+        cout << "Editing station\n";
+        cout << "Input number of working workshops:\n";
+        s.number_of_working_workshops = -1;
+        while (s.number_of_working_workshops < 0 || s.number_of_working_workshops > s.number_of_workshops) {
+            s.number_of_working_workshops = input_integer();
+            if (s.number_of_working_workshops > s.number_of_workshops) {
+                cout << "Wrong input\n";
+                cout << "Try again:\n";
+            }
         }
+    }
+    else {
+        cout << "\nNo stations\n";
     }
 }
 
-void Output(Pipe p, Station s)
+void Output(const Pipe& p, const Station& s)
 {
-    cout << "Output\n";
+    cout << "\nOutput\n";
+    // if (vector_of_Pipes.length != 0
     if (p.length > 0) {
         cout << "\nOutput Pipe(s)";
         cout << "\nId: " << p.id;
         cout << "\nDiameter: " << p.diameter;
         cout << "\nLength: " << p.length << "\n";
     }
+    // if (vector_of_Station.length != 0){}
     if (s.name != "") {
         cout << "\nOutput station(s)";
         cout << "\nId: " << s.id;
@@ -134,7 +170,7 @@ void Output(Pipe p, Station s)
     }
 }
 
-void Save(Pipe p, Station s) {
+void Save(const Pipe& p, const Station& s) {
     ofstream file;
     file.open("database.txt");
     // if(arrayStation.length() != 0) {}
@@ -191,16 +227,13 @@ int main()
     p1.length = -1;  // костыль
     Station s1;
     s1.name = "";  // костыль
-    bool menu = true;
-    while (menu) {
+
+    while (1) {
         printMenu();
-        int choose;
-        cin >> choose;
-        switch (choose) {
+        switch (input_integer()) {
         case 0:
             cout << "\nExit\n";
-            menu = false;
-            break;
+            return 0;
         case 1:
             p1 = AddPipe(0);
             break;
@@ -208,9 +241,7 @@ int main()
             s1 = AddStation(0);
             break;
         case 3:
-            // if (vector_of_Pipes.length != 0){}
             Output(p1, s1);
-            // if (vector_of_Station.length != 0){}
             break;
         case 4:
             PipeEdit(p1);
@@ -219,7 +250,6 @@ int main()
             StationEdit(s1);
             break;
         case 6:
-            // При первом сейве сделать проверку на vector.length 
             Save(p1, s1);
             break;
         case 7:
