@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -75,7 +76,15 @@ Pipe AddPipe(int id)
 }
 
 void PipeEdit(Pipe& p) {
-    // if (array_of_pipes != 0) {}
+    /*if (pipesStation.size() != 0) {
+        cout << "Input Id, if dsafdsa input -1";
+        int id = -2;
+        while (id != -1) {
+            id = input_integer();
+
+        }
+
+    }*/
     if (PiExists(p)) {
         p.isWorking = !p.isWorking;
         cout << "Pipe edited\n";
@@ -149,24 +158,26 @@ void StationEdit(Station& s) {
     }
 }
 
-void Output(const Pipe& p, const Station& s)
+void Output(const vector<Pipe>& pipesVector, const vector<Station>& stationsVector)
 {
     cout << "\nOutput\n";
-    // if (vector_of_Pipes.length != 0
-    if (p.length > 0) {
-        cout << "\nOutput Pipe(s)";
-        cout << "\nId: " << p.id;
-        cout << "\nDiameter: " << p.diameter;
-        cout << "\nLength: " << p.length << "\n";
+    if (pipesVector.size() != 0) {
+        for (Pipe const p : pipesVector) {
+            cout << "\nOutput Pipe(s)";
+            cout << "\nId: " << p.id;
+            cout << "\nDiameter: " << p.diameter;
+            cout << "\nLength: " << p.length << "\n";
+        }
     }
-    // if (vector_of_Station.length != 0){}
-    if (s.name != "") {
-        cout << "\nOutput station(s)";
-        cout << "\nId: " << s.id;
-        cout << "\nname: " << s.name;
-        cout << "\nnumber of workshops: " << s.number_of_workshops;
-        cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
-        cout << "\nEfficiency: " << s.Efficiency << "\n";
+    if (stationsVector.size() != 0) {
+        for (Station const s : stationsVector) {
+            cout << "\nOutput station(s)";
+            cout << "\nId: " << s.id;
+            cout << "\nname: " << s.name;
+            cout << "\nnumber of workshops: " << s.number_of_workshops;
+            cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
+            cout << "\nEfficiency: " << s.Efficiency << "\n";
+        }
     }
 }
 
@@ -228,6 +239,9 @@ int main()
     Station s1;
     s1.name = "";  // костыль
 
+    std::vector<Pipe> vectorOfPipes;
+    std::vector<Station> vectorOfStations;
+
     while (1) {
         printMenu();
         switch (input_integer()) {
@@ -235,13 +249,13 @@ int main()
             cout << "\nExit\n";
             return 0;
         case 1:
-            p1 = AddPipe(0);
+            vectorOfPipes.push_back(AddPipe(0));
             break;
         case 2:
             s1 = AddStation(0);
             break;
         case 3:
-            Output(p1, s1);
+            Output(vectorOfPipes, vectorOfStations);
             break;
         case 4:
             PipeEdit(p1);
