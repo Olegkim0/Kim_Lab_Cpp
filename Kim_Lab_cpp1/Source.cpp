@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -56,7 +57,7 @@ bool PiExists(const Pipe& p) {
     return p.id != -1;
 }
 
-Pipe AddPipe(int id)
+Pipe AddPipe(int i)
 {
     cout << "Adding Pipe\n";
     Pipe p;
@@ -239,6 +240,10 @@ int main()
     Station s1;
     s1.name = "";  // костыль
 
+    map<int, Pipe> mapOfPipes;
+    std::map<int, Pipe>::iterator it = mapOfPipes.begin();
+    map<int, Station> mapOfStation;
+
     std::vector<Pipe> vectorOfPipes;
     std::vector<Station> vectorOfStations;
 
@@ -249,12 +254,14 @@ int main()
             cout << "\nExit\n";
             return 0;
         case 1:
+            mapOfPipes.insert(it, pair<int, Pipe>(mapOfPipes.size(), AddPipe(mapOfPipes.size())));
             vectorOfPipes.push_back(AddPipe(0));
             break;
         case 2:
             s1 = AddStation(0);
             break;
         case 3:
+            cout << "\n\n\n" << mapOfPipes.size() << "\n\n\n";
             Output(vectorOfPipes, vectorOfStations);
             break;
         case 4:
