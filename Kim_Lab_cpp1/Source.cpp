@@ -159,11 +159,18 @@ void StationEdit(Station& s) {
     }
 }
 
-void Output(const vector<Pipe>& pipesVector, const vector<Station>& stationsVector)
+void Output(const map<int, Pipe>& pipesMap, const vector<Station>& stationsVector)
 {
+    for (map<int, Pipe>::iterator it = pipesMap.begin(); it != pipesMap.end(); ++it) {
+        key.push_back(it->first);
+        value.push_back(it->second);
+        std::cout << "Key: " << it->first << std::endl();
+        std::cout << "Value: " << it->second << std::endl();
+    }
+
     cout << "\nOutput\n";
-    if (pipesVector.size() != 0) {
-        for (Pipe const p : pipesVector) {
+    if (pipesMap.size() != 0) {
+        for (Pipe const p : pipesMap) {
             cout << "\nOutput Pipe(s)";
             cout << "\nId: " << p.id;
             cout << "\nDiameter: " << p.diameter;
