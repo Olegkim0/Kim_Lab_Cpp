@@ -53,10 +53,6 @@ struct Pipe {
     bool isWorking = true;
 };
 
-bool PiExists(const Pipe& p) {
-    return p.id != -1;
-}
-
 Pipe AddPipe(int i)
 {
     cout << "Adding Pipe\n";
@@ -86,14 +82,14 @@ void PipeEdit(Pipe& p) {
         }
 
     }*/
-    if (PiExists(p)) {
+    //if (PiExists(p)) {
         p.isWorking = !p.isWorking;
         cout << "Pipe edited\n";
         cout << "Is pipe working? " << p.isWorking << "\n";
-    }
-    else {
-        cout << "\nNo pipes\n";
-    }
+    //}
+    //else {
+        //cout << "\nNo pipes\n";
+    //}
 }
 
 struct Station {
@@ -103,11 +99,6 @@ struct Station {
     int number_of_working_workshops;
     int Efficiency;
 };
-
-bool StExists(const Station& s)
-{
-    return s.id != -1;;
-}
 
 Station AddStation(int id) {
     cout << "Adding Station\n";
@@ -142,7 +133,7 @@ Station AddStation(int id) {
 
 void StationEdit(Station& s) {
     // if (array_of_stations != 0){}
-    if (StExists(s)) {
+    //if (StExists(s)) {
         cout << "Editing station\n";
         cout << "Input number of working workshops:\n";
         s.number_of_working_workshops = -1;
@@ -153,69 +144,66 @@ void StationEdit(Station& s) {
                 cout << "Try again:\n";
             }
         }
-    }
-    else {
-        cout << "\nNo stations\n";
-    }
+    //}
+    //else {
+        //cout << "\nNo stations\n";
+    //}
 }
 
-void Output(const map<int, Pipe>& pipesMap, const vector<Station>& stationsVector)
+void Output(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap)
 {
-    for (map<int, Pipe>::iterator it = pipesMap.begin(); it != pipesMap.end(); ++it) {
-        key.push_back(it->first);
-        value.push_back(it->second);
-        std::cout << "Key: " << it->first << std::endl();
-        std::cout << "Value: " << it->second << std::endl();
-    }
 
     cout << "\nOutput\n";
     if (pipesMap.size() != 0) {
-        for (Pipe const p : pipesMap) {
+        for (auto& item : pipesMap) {
             cout << "\nOutput Pipe(s)";
-            cout << "\nId: " << p.id;
-            cout << "\nDiameter: " << p.diameter;
-            cout << "\nLength: " << p.length << "\n";
+            cout << "\nId: " << item.first;
+            cout << "\nDiameter: " << item.second.diameter;
+            cout << "\nLength: " << item.second.length << "\n";
         }
     }
-    if (stationsVector.size() != 0) {
-        for (Station const s : stationsVector) {
+
+    if (stationsMap.size() != 0) {
+        for (auto& item : stationsMap) {
             cout << "\nOutput station(s)";
-            cout << "\nId: " << s.id;
-            cout << "\nname: " << s.name;
-            cout << "\nnumber of workshops: " << s.number_of_workshops;
-            cout << "\nnumber of working workshops: " << s.number_of_working_workshops;
-            cout << "\nEfficiency: " << s.Efficiency << "\n";
+            cout << "\nId: " << item.first;
+            cout << "\nname: " << item.second.name;
+            cout << "\nnumber of workshops: " << item.second.number_of_workshops;
+            cout << "\nnumber of working workshops: " << item.second.number_of_working_workshops;
+            cout << "\nEfficiency: " << item.second.Efficiency << "\n";
         }
     }
 }
 
-void Save(const Pipe& p, const Station& s) {
+void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) {
     ofstream file;
     file.open("database.txt");
-    // if(arrayStation.length() != 0) {}
-    // for (int i; i < arrayStation.length(); i++){}
     if (file.good()) {
-        if (p.length > 0) {
-            file << "Pipe:\n";
-            file << p.id << "\n";
-            file << p.diameter << "\n";
-            file << p.length << "\n";
-            file << p.isWorking << "\n";
+        if (pipesMap.size() != 0) {
+            for (const auto& item : pipesMap) {
+                file << "Pipe:\n";
+                file << item.first << "\n";
+                file << item.second.diameter << "\n";
+                file << item.second.length << "\n";
+                file << item.second.isWorking << "\n";
+            }
         }
-        if (s.name != "") {
-            file << "Station:\n";
-            file << s.id << "\n";
-            file << s.name << "\n";
-            file << s.number_of_workshops << "\n";
-            file << s.number_of_working_workshops << "\n";
-            file << s.Efficiency;
+        if (stationsMap.size() != 0) {
+            for (const auto& item : stationsMap) {
+                file << "Station:\n";
+                file << item.first << "\n";
+                file << item.second.name << "\n";
+                file << item.second.number_of_workshops << "\n";
+                file << item.second.number_of_working_workshops << "\n";
+                file << item.second.Efficiency << "\n";
+            }
         }
         file.close();
         cout << "Saved\n";
     }
 }
 
-void Load(Pipe& p, Station& s) {
+void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
     ifstream file;
     file.open("database.txt");
     if (file.good()) {
@@ -223,17 +211,22 @@ void Load(Pipe& p, Station& s) {
             string type;
             file >> type;
             if (type == "Pipe:") {
-                file >> p.id;
-                file >> p.diameter;
-                file >> p.length;
-                file >> p.isWorking;
+                Pipe tempPipe;
+                file >> tempPipe.id;
+                file >> tempPipe.diameter;
+                file >> tempPipe.length;
+                file >> tempPipe.isWorking;
+                pipesMap.insert(pair<int, Pipe>(pipesMap.size(), tempPipe));
             }
+
             if (type == "Station:") {
-                file >> s.id;
-                file >> s.name;
-                file >> s.number_of_workshops;
-                file >> s.number_of_working_workshops;
-                file >> s.Efficiency;
+                Station tempStation;
+                file >> tempStation.id;
+                file >> tempStation.name;
+                file >> tempStation.number_of_workshops;
+                file >> tempStation.number_of_working_workshops;
+                file >> tempStation.Efficiency;
+                stationsMap.insert(pair<int, Station>(stationsMap.size(), tempStation));
             }
         }
     }
@@ -242,17 +235,15 @@ void Load(Pipe& p, Station& s) {
 
 int main()
 {
-    Pipe p1;
-    p1.length = -1;  // костыль
-    Station s1;
-    s1.name = "";  // костыль
+    int pipeID = 0;
+    int stationID = 0;
 
     map<int, Pipe> mapOfPipes;
-    std::map<int, Pipe>::iterator it = mapOfPipes.begin();
     map<int, Station> mapOfStation;
 
-    std::vector<Pipe> vectorOfPipes;
-    std::vector<Station> vectorOfStations;
+    int tempID;
+    std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
+    std::map<int, Station>::iterator stationsIterator;
 
     while (1) {
         printMenu();
@@ -261,27 +252,56 @@ int main()
             cout << "\nExit\n";
             return 0;
         case 1:
-            mapOfPipes.insert(it, pair<int, Pipe>(mapOfPipes.size(), AddPipe(mapOfPipes.size())));
-            vectorOfPipes.push_back(AddPipe(0));
+            mapOfPipes.insert(pair<int, Pipe>(mapOfPipes.size(), AddPipe(mapOfPipes.size())));
+            pipeID++;
             break;
         case 2:
-            s1 = AddStation(0);
+            mapOfStation.insert(pair<int, Station>(mapOfStation.size(), AddStation(mapOfStation.size())));
+            stationID++;
             break;
         case 3:
             cout << "\n\n\n" << mapOfPipes.size() << "\n\n\n";
-            Output(vectorOfPipes, vectorOfStations);
+            Output(mapOfPipes, mapOfStation);
             break;
         case 4:
-            PipeEdit(p1);
+            cout << "\ninput id\n";
+            tempID = input_integer();
+            while (tempID > pipeID)
+            {
+                cout << "\nWrong input\n";
+                tempID = input_integer();
+            }
+            pipesIterator = mapOfPipes.find(tempID);
+            
+            if (pipesIterator != mapOfPipes.end())
+                PipeEdit(mapOfPipes[tempID]);
+            else
+            {
+                cout << "\nWrong ID\n";
+            }
             break;
         case 5:
-            StationEdit(s1);
+            cout << "\ninput id\n";
+            tempID = input_integer();
+            while (tempID > stationID)
+            {
+                cout << "\nWrong input\n";
+                tempID = input_integer();
+            }
+            stationsIterator = mapOfStation.find(tempID);
+
+            if (stationsIterator != mapOfStation.end())
+                StationEdit(mapOfStation[tempID]);
+            else
+            {
+                cout << "\nWrong ID\n";
+            }
             break;
         case 6:
-            Save(p1, s1);
+            Save(mapOfPipes, mapOfStation);
             break;
         case 7:
-            Load(p1, s1);
+            Load(mapOfPipes, mapOfStation);
             break;
         default:
             break;
