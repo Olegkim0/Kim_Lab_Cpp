@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{73282dfd-84ff-4746-82e2-40ed7e537998}</ProjectGuid>
-    <RootNamespace>KimLabcpp1</RootNamespace>
+    <ProjectGuid>{6ce250be-09cd-4d84-b008-4512b9b29b21}</ProjectGuid>
+    <RootNamespace>Labcpp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pipe.cpp" />
+    <ClCompile Include="additionalFunctions.cpp" />
+    <ClCompile Include="Station.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="additionalFunctions.h" />
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="Station.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
