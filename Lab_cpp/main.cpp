@@ -12,6 +12,8 @@ int main()
 {
     map<int, Pipe> mapOfPipes;
     map<int, Station> mapOfStation;
+    vector<int> pipesVectorID;
+    vector<int> stationsVectorID;
 
     int tempID;
     std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
@@ -25,11 +27,9 @@ int main()
             return 0;
         case 1:
             mapOfPipes.insert(pair<int, Pipe>(mapOfPipes.size(), Pipe()));
-            Pipe::id++;
             break;
         case 2:
             mapOfStation.insert(pair<int, Station>(mapOfStation.size(), Station()));
-            Station::id++;
             break;
         case 3:
             cout << "\nOutput Pipe(s)";
@@ -85,7 +85,8 @@ int main()
             Load(mapOfPipes, mapOfStation);
             break;
         case 8:
-            filter(mapOfPipes);
+            //pipesVectorID = search(mapOfPipes);
+            pipesVectorID = search(mapOfStation);
             break;
         default:
             break;

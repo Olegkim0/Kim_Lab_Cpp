@@ -1,12 +1,26 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <map>
+#include <vector>
 #include "Station.h"
 #include "Pipe.h"
-#include <vector>
 
 using namespace std;
+
+void printMenu() {
+    cout << "\n\nMenu:\n";
+    cout << "1. Add pipe\n";
+    cout << "2. Add station\n";
+    cout << "3. Output\n";
+    cout << "4. Edit pipe\n";
+    cout << "5. Edit station\n";
+    cout << "6. Save\n";
+    cout << "7. Load\n";
+    cout << "8. Filter pipes\n";
+    cout << "0. Exit\n\n";
+}
 
 int inputInteger() {
     string str;
@@ -19,7 +33,7 @@ int inputInteger() {
     else {
         return stoi(str);
     }
-return -1;
+    return -1;
 }
 
 double inputDouble() {
@@ -34,6 +48,16 @@ double inputDouble() {
         return stod(str);
     }
     return -1;
+}
+
+int choose(int number) {
+    int result;
+    do
+    {
+        result = inputInteger();
+    } while (result < 0 || result > number);
+    
+    return result;
 }
 
 void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) {
@@ -62,18 +86,6 @@ void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) 
         file.close();
         cout << "Saved\n";
     }
-}
-
-void printMenu() {
-    cout << "\nMenu:\n";
-    cout << "1. Add pipe\n";
-    cout << "2. Add station\n";
-    cout << "3. Output\n";
-    cout << "4. Edit pipe\n";
-    cout << "5. Edit station\n";
-    cout << "6. Save\n";
-    cout << "7. Load\n";
-    cout << "0. Exit\n\n";
 }
 
 void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
@@ -106,82 +118,136 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
     cout << "Loaded\n";
 }
 
-void filter(map<int, Pipe>& pipesMap) {
-    int choose;
-    cout << "Filter by:\n1) name\n2) is working?\n0) Exit";
-    do
-        choose = inputInteger();
-    while (choose != 0 || choose != 1 || choose != 2);
-    
+vector<int> search(map<int, Pipe>& pipesMap) {
+
+    vector<int> vectorID;
+
+    if (pipesMap.size() == 0)
+        return vectorID;
+
+    cout << "Filter by:\n1) name\n2) is working?\n0) Exit\n";
+
     string name;
     bool isWorking;
-    vector<int> vectorID;
-    switch (choose)
+    switch (choose(2))
     {
     case 0:
-        return;
+        return vectorID;
     case 1:
-        cout << "Input name:";
+        cout << "Input name:\n";
         cin >> name;
-
         for (auto& item : pipesMap) {
             if (item.second.name == name) {
                 vectorID.push_back(item.first);
             }
         }
+        break;
     case 2:
         do
         {
             isWorking = inputInteger();
-        } while (isWorking != 0 || isWorking != 1);
+        } while (isWorking < 0 || isWorking > 1);
         for (auto& item : pipesMap)
             if (item.second.isWorking == isWorking)
                 vectorID.push_back(item.first);
         break;
     default:
         break;
-
-        for (auto i : vectorID)
-            cout << i;
     }
+    cout << "ID: ";
+    for (int i : vectorID)
+        cout << i << "  ";
+    return vectorID;
 }
 
-void filter(map<int, Station>& stationsMap) {
+vector<int> search(map<int, Station>& stationsMap) {
+    vector<int> vectorID;
+    if (stationsMap.size() == 0)
+        return vectorID;
+
     int choose;
-    cout << "Filter by:\n1) name\n2) percent of non working stations?\n0) Exit";
+    cout << "\nFilter by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
     do
         choose = inputInteger();
-    while (choose != 0 || choose != 1 || choose != 2);
+    while (choose < 0 || choose > 2);
 
     string name;
-    bool isWorking;
-    vector<int> vectorID;
+    double percentOfWorkshops;
     switch (choose)
     {
     case 0:
-        return;
+        return vectorID;
     case 1:
-        cout << "Input name:";
+        cout << "\nInput name:\n";
         cin >> name;
-
         for (auto& item : stationsMap) {
             if (item.second.name == name) {
                 vectorID.push_back(item.first);
             }
         }
+        break;
     case 2:
+        cout << "\nInput percent of non working stations\n";
         do
         {
-            isWorking = inputInteger();
-        } while (isWorking != 0 || isWorking != 1);
-        for (auto& item : stationsMap)
-            if (item.second.isWorking == isWorking)
-                vectorID.push_back(item.first);
+            percentOfWorkshops = inputDouble();
+        } while (percentOfWorkshops <= 0 || percentOfWorkshops > 100);
+        if (percentOfWorkshops == 0)
+            return vectorID;
+        
+        do
+        {
+            cout << "\n1) less\n2) more\n0) exit\n";
+            choose = inputInteger();
+        } while (choose < 0 || choose > 2);
+
+        if (choose == 1)
+            for (auto& item : stationsMap)
+                if ((1.0 * item.second.number_of_working_workshops / (1.0 * item.second.number_of_workshops)) * 100 < percentOfWorkshops)
+                    vectorID.push_back(item.first);
+        else if (choose == 2)
+            for (auto& item : stationsMap)
+                if ((1.0 * item.second.number_of_working_workshops / (1.0 * item.second.number_of_workshops)) * 100 >= percentOfWorkshops)
+                    vectorID.push_back(item.first);
         break;
     default:
-        break;
+        break; 
+    }
+    cout << "ID: ";
+    for (int i : vectorID)
+        cout << i << "  ";
+    return vectorID;
+}
 
-        for (auto i : vectorID)
-            cout << i;
+void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
+    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
+    switch (choose(1)) {
+    case 0:
+        for (auto& item : pipesMap) {
+            item.second.PipeEdit();
+        }
+        break;
+    case 1:
+        for (int id : vectorID) {
+            pipesMap[id].PipeEdit();
+        }
+        break;
+    }
+}
+
+
+void filtraton(map<int, Station>& stationsMap, vector<int> vectorID) {
+    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
+    switch (choose(1)) {
+    case 0:
+        for (auto& item : stationsMap) {
+            item.second.StationEdit();
+        }
+        break;
+    case 1:
+        for (int id : vectorID) {
+            stationsMap[id].StationEdit();
+        }
+        break;
     }
 }

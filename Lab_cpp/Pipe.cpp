@@ -1,5 +1,5 @@
-#include "Pipe.h"
 #include <iostream>
+#include "Pipe.h"
 #include "additionalFunctions.h"
 
 #pragma once
@@ -8,6 +8,9 @@ using namespace std;
 
 Pipe::Pipe()
 {
+
+    id++;
+
     cout << "Adding Pipe\n";
 
     cout << "Input name:\n";

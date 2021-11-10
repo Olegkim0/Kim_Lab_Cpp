@@ -8,6 +8,9 @@ using namespace std;
 
 Station::Station()
 {
+
+    id++;
+
     cout << "Adding Station\n";
 
     cout << "Input name:\n";
