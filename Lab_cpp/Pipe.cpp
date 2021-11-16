@@ -35,7 +35,11 @@ Pipe::~Pipe()
 }
 
 void Pipe::PipeEdit() {
-    isWorking = !isWorking;
+    cout << "is work?\n0) Yes\n1) No\n"
+        if (choose(1) == 0)
+            isWorking = true;
+        else
+            isWorking = false;
     cout << "Pipe edited\n";
     cout << "Is pipe working? " << isWorking << "\n";
 }

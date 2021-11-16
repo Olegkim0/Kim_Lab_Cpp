@@ -16,9 +16,12 @@ void printMenu() {
     cout << "3. Output\n";
     cout << "4. Edit pipe\n";
     cout << "5. Edit station\n";
-    cout << "6. Save\n";
-    cout << "7. Load\n";
+    cout << "6. Delete pipe\n";
+    cout << "7. Delete station\n";
     cout << "8. Filter pipes\n";
+    cout << "9. Filter stations\n";
+    cout << "10. Save\n";
+    cout << "11. Load\n";
     cout << "0. Exit\n\n";
 }
 
@@ -53,9 +56,8 @@ double inputDouble() {
 int choose(int number) {
     int result;
     do
-    {
         result = inputInteger();
-    } while (result < 0 || result > number);
+    while (result < 0 || result > number);
     
     return result;
 }
@@ -228,6 +230,11 @@ void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
         }
         break;
     case 1:
+        for (int id : vectorID)
+            pipesMap[id].Output;
+        
+        cout << "Do you want to change \n0) All\n1)set";
+        
         for (int id : vectorID) {
             pipesMap[id].PipeEdit();
         }
@@ -235,8 +242,7 @@ void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
     }
 }
 
-
-void filtraton(map<int, Station>& stationsMap, vector<int> vectorID) {
+void filtration(map<int, Station>& stationsMap, vector<int> vectorID) {
     cout << "Edit all or set of stations?\n0) all\n 1)set\n";
     switch (choose(1)) {
     case 0:
@@ -245,7 +251,7 @@ void filtraton(map<int, Station>& stationsMap, vector<int> vectorID) {
         }
         break;
     case 1:
-        for (int id : vectorID) {
+        for (int id : vectorID) {   
             stationsMap[id].StationEdit();
         }
         break;

@@ -21,7 +21,7 @@ int main()
 
     while (1) {
         printMenu();
-        switch (inputInteger()) {
+        switch (choose(11)) {
         case 0:
             cout << "\nExit\n";
             return 0;
@@ -79,14 +79,24 @@ int main()
             }
             break;
         case 6:
-            Save(mapOfPipes, mapOfStation);
+            mapOfPipes.erase(choose(mapOfPipes.size());
             break;
         case 7:
-            Load(mapOfPipes, mapOfStation);
+            mapOfPipes.erase(choose(mapOfStation.size());
             break;
         case 8:
-            //pipesVectorID = search(mapOfPipes);
-            pipesVectorID = search(mapOfStation);
+            filtration(mapOfPipes, search(mapOfPipes));
+            pipesVectorID.clear();
+            break;
+        case 9:
+            filtration(mapOfStation, search(mapOfStation));
+            stationsVectorID.clear();
+            break;
+        case 10:
+            Save(mapOfPipes, mapOfStation);
+            break;
+        case 11:
+            Load(mapOfPipes, mapOfStation);
             break;
         default:
             break;
