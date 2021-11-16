@@ -234,7 +234,7 @@ void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
             pipesMap[id].Output;
         
         cout << "Do you want to change \n0) All\n1)set";
-        
+            
         for (int id : vectorID) {
             pipesMap[id].PipeEdit();
         }
