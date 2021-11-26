@@ -5,7 +5,6 @@ using namespace std;
 
 class Station {
 public:
-    static int id;
     string name;
     int numberOfWorkshops;
     int numberOfWorkingWorkshops;
@@ -20,5 +19,10 @@ public:
     void StationEdit();
 
     void Output();
+
+    static void setId(int newID);
+
+    static int getId();
 private:
+    static int id;
 };

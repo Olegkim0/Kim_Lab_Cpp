@@ -36,6 +36,10 @@ Station::Station()
     efficiency = 0;
     while (efficiency <= 0 || efficiency > 100) {
         efficiency = inputInteger();
+        if (efficiency <= 0 || efficiency > 100) {
+            cout << "Wrong input\n";
+            cout << "Try again:\n";
+        };
     }
 }
 
@@ -68,4 +72,12 @@ void Station::Output() {
     cout << "\nnumber of workshops: " << numberOfWorkshops;
     cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
     cout << "\nEfficiency: " << efficiency << "\n";
+}
+
+void Station::setId(int newID) {
+    id = newID;
+}
+
+int Station::getId() {
+    return id;
 }

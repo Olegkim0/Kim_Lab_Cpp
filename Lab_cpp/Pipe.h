@@ -5,7 +5,6 @@ using namespace std;
 
 class Pipe {
 public:
-    static int id;
     string name;
     int diameter;
     double length;
@@ -20,7 +19,12 @@ public:
     void PipeEdit();
 
     void Output();
+
+    static void setId(int newID);
+
+    static int getId();
 private:
+    static int id;
 
 };  
 

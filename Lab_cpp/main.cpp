@@ -27,10 +27,10 @@ int main()
             cout << "\nExit\n";
             return 0;
         case 1:
-            mapOfPipes.insert(pair<int, Pipe>(Pipe::id, Pipe()));
+            mapOfPipes.insert(pair<int, Pipe>(Pipe::getId(), Pipe()));
             break;
         case 2:
-            mapOfStation.insert(pair<int, Station>(Station::id, Station()));
+            mapOfStation.insert(pair<int, Station>(Station::getId(), Station()));
             break;
         case 3:
             cout << "\nOutput Pipe(s)";
@@ -48,7 +48,7 @@ int main()
         case 4:
             cout << "\ninput id\n";
             tempID = inputInteger();
-            while (tempID > Pipe::id)
+            while (tempID > Pipe::getId())
             {
                 cout << "\nWrong input\n";
                 tempID = inputInteger();
@@ -65,7 +65,7 @@ int main()
         case 5:
             cout << "\ninput id\n";
             tempID = inputInteger();
-            while (tempID > Station::id)
+            while (tempID > Station::getId())
             {
                 cout << "\nWrong input\n";
                 tempID = inputInteger();

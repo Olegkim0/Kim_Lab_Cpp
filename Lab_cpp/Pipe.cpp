@@ -44,18 +44,26 @@ Pipe::~Pipe()
 }
 
 void Pipe::PipeEdit() {
-    cout << "is work?\n0) Yes\n1) No\n";
-        if (choose(1) == 0)
+    cout << "is working?\n0) Yes\n1) No\n";
+        if (inputInteger() == 0)
             isWorking = true;
-        else
+        else if (inputInteger() == 1)
             isWorking = false;
     cout << "Pipe edited\n";
     cout << "Is pipe working? " << isWorking << "\n";
 }
 
 void Pipe::Output() {
+    cout << "\nName: " << name;
     cout << "\nDiameter: " << diameter;
     cout << "\nLength: " << length;
     cout << "\nIs working?: " << isWorking << "\n";
 }
 
+void Pipe::setId(int newID) {
+    id = newID;
+}
+
+int Pipe::getId() {
+    return id;
+}

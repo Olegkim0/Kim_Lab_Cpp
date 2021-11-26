@@ -56,11 +56,11 @@ double inputDouble() {
 
 int choose(int number) {
     int result;
-    do
-        result = inputInteger();
-    while (result < 0 || result > number);
-    
-    return result;
+    do {
+        return inputInteger();
+        cout << "Wrong input";
+    }
+    while (result < 0 || result > number); 
 }
 
 void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) {
@@ -77,6 +77,7 @@ void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) 
             for (const auto& item : pipesMap) {
                 file << "Pipe:\n";
                 file << item.first << "\n";
+                file << item.second.name << "\n";
                 file << item.second.diameter << "\n";
                 file << item.second.length << "\n";
                 file << item.second.isWorking << "\n";
@@ -105,7 +106,7 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
 
     ifstream file;
 
-    cout << "Input File name\n";
+    cout << "Input File name:\n";
     string fileName;
     cin >> fileName;
     fileName += ".txt";
@@ -131,7 +132,7 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
                 bool isWorking;
                 file >> isWorking;
 
-                Pipe::id = id + 1;
+                Pipe::id = id;
 
                 Pipe p = Pipe(name, diameter, length, isWorking);
                 pipesMap.insert(pair<int, Pipe>(id, p));
@@ -156,14 +157,17 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
                 double efficiency;
                 file >> efficiency;
 
-                Station::id = id + 1;
+                Station::id = id;
 
                 Station s = Station(name, numberOfWorkshops, numberOfWorkingWorkshops, efficiency);
                 stationsMap.insert(pair<int, Station>(id, s));
             }
         }
+        cout << "Loaded\n";
     }
-    cout << "Loaded\n";
+    else {
+        cout << "File not found 404\n";
+    }
 }
 
 vector<int> search(const map<int, Pipe>& pipesMap) {
