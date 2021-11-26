@@ -1,14 +1,13 @@
+#pragma once
 #include <iostream>
 #include "Pipe.h"
 #include "additionalFunctions.h"
 
-#pragma once
 
 using namespace std;
 
 Pipe::Pipe()
 {
-
     id++;
 
     cout << "Adding Pipe\n";
@@ -28,6 +27,16 @@ Pipe::Pipe()
     while (length <= 0) {
         length = inputDouble();
     }
+
+    isWorking = true;
+}
+
+Pipe::Pipe(string name, int diameter, double length, bool isWorking)
+{
+    this->name = name;
+    this->diameter = diameter;
+    this->length = length;
+    this->isWorking = isWorking;
 }
 
 Pipe::~Pipe()
@@ -35,7 +44,7 @@ Pipe::~Pipe()
 }
 
 void Pipe::PipeEdit() {
-    cout << "is work?\n0) Yes\n1) No\n"
+    cout << "is work?\n0) Yes\n1) No\n";
         if (choose(1) == 0)
             isWorking = true;
         else

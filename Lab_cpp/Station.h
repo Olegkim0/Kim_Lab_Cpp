@@ -1,19 +1,24 @@
 #pragma once
 #include <string>
 
+using namespace std;
+
 class Station {
 public:
     static int id;
-    std::string name;
-    int number_of_workshops;
-    int number_of_working_workshops;
-    int Efficiency;
+    string name;
+    int numberOfWorkshops;
+    int numberOfWorkingWorkshops;
+    int efficiency;
 
     Station();
+
+    Station(string name, int numberOfWorkshops, int numberOfWorkingWorkshops, int efficiency);
 
     ~Station();
 
     void StationEdit();
 
     void Output();
+private:
 };

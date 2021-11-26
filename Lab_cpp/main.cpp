@@ -1,3 +1,4 @@
+#pragma once
 #include "Pipe.h"
 #include "Station.h"
 #include "additionalFunctions.h"
@@ -19,27 +20,27 @@ int main()
     std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
     std::map<int, Station>::iterator stationsIterator;
 
-    while (1) {
+    while (true) {
         printMenu();
         switch (choose(11)) {
         case 0:
             cout << "\nExit\n";
             return 0;
         case 1:
-            mapOfPipes.insert(pair<int, Pipe>(mapOfPipes.size(), Pipe()));
+            mapOfPipes.insert(pair<int, Pipe>(Pipe::id, Pipe()));
             break;
         case 2:
-            mapOfStation.insert(pair<int, Station>(mapOfStation.size(), Station()));
+            mapOfStation.insert(pair<int, Station>(Station::id, Station()));
             break;
         case 3:
             cout << "\nOutput Pipe(s)";
-            for (auto item : mapOfPipes) {
+            for (auto &item : mapOfPipes) {
                 cout << "\nID: " << item.first;
                 item.second.Output();
             }
-
+            
             cout << "\nOutput station(s)";
-            for (auto item : mapOfStation) {
+            for (auto &item : mapOfStation) {
                 cout << "\nID: " << item.first;
                 item.second.Output();
             }    
@@ -79,10 +80,16 @@ int main()
             }
             break;
         case 6:
-            mapOfPipes.erase(choose(mapOfPipes.size());
+            if (mapOfPipes.size() != 0)
+                mapOfPipes.erase(choose(mapOfPipes.size() - 1));
+            else
+                cout << "No pipes";
             break;
         case 7:
-            mapOfPipes.erase(choose(mapOfStation.size());
+            if (mapOfStation.size() != 0)
+                mapOfStation.erase(choose(mapOfStation.size() - 1));
+            else
+                cout << "No stations";
             break;
         case 8:
             filtration(mapOfPipes, search(mapOfPipes));
@@ -97,6 +104,9 @@ int main()
             break;
         case 11:
             Load(mapOfPipes, mapOfStation);
+            break;
+        case 12:
+            //  tests
             break;
         default:
             break;

@@ -6,17 +6,17 @@
 
 using namespace std;
 
+void printMenu();
+
 int inputInteger();
 
 double inputDouble();
 
 int choose(int number);
 
-void Save(const std::map<int, Pipe>&pipesMap, const std::map<int, Station>& stationsMap);
+void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap);
 
-void printMenu();
-
-void Load(std::map<int, Pipe>& pipesMap, std::map<int, Station>& stationsMap);
+void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap);
 
 vector<int> search(const map<int, Pipe>& pipesMap);
 

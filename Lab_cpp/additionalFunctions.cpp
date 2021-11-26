@@ -6,6 +6,7 @@
 #include <vector>
 #include "Station.h"
 #include "Pipe.h"
+#include <set>
 
 using namespace std;
 
@@ -64,7 +65,13 @@ int choose(int number) {
 
 void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) {
     ofstream file;
-    file.open("database.txt");
+
+    cout << "Input File name\n";
+    string fileName;
+    cin >> fileName;
+    fileName += ".txt";
+
+    file.open(fileName);
     if (file.good()) {
         if (pipesMap.size() != 0) {
             for (const auto& item : pipesMap) {
@@ -75,14 +82,15 @@ void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) 
                 file << item.second.isWorking << "\n";
             }
         }
+
         if (stationsMap.size() != 0) {
             for (const auto& item : stationsMap) {
                 file << "Station:\n";
                 file << item.first << "\n";
                 file << item.second.name << "\n";
-                file << item.second.number_of_workshops << "\n";
-                file << item.second.number_of_working_workshops << "\n";
-                file << item.second.Efficiency << "\n";
+                file << item.second.numberOfWorkshops << "\n";
+                file << item.second.numberOfWorkingWorkshops << "\n";
+                file << item.second.efficiency << "\n";
             }
         }
         file.close();
@@ -91,36 +99,74 @@ void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) 
 }
 
 void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
+
+    pipesMap.clear();
+    stationsMap.clear();
+
     ifstream file;
-    file.open("database.txt");
+
+    cout << "Input File name\n";
+    string fileName;
+    cin >> fileName;
+    fileName += ".txt";
+    file.open(fileName);
     if (file.good()) {
         while (!file.eof()) {
             string type;
             file >> type;
             if (type == "Pipe:") {
-                Pipe tempPipe;
-                file >> tempPipe.id;
-                file >> tempPipe.diameter;
-                file >> tempPipe.length;
-                file >> tempPipe.isWorking;
-                pipesMap.insert(pair<int, Pipe>(pipesMap.size(), tempPipe));
+
+                int id;
+                file >> id;
+
+                string name;
+                file >> name;
+
+                int diameter;
+                file >> diameter;
+
+                int length;
+                file >> length;
+
+                bool isWorking;
+                file >> isWorking;
+
+                Pipe::id = id + 1;
+
+                Pipe p = Pipe(name, diameter, length, isWorking);
+                pipesMap.insert(pair<int, Pipe>(id, p));
+
+                // pipesMap[id] = Pipe(name, diameter, length, isWorking);  Why is it cause 2 constructor?
             }
 
             if (type == "Station:") {
-                Station tempStation;
-                file >> tempStation.id;
-                file >> tempStation.name;
-                file >> tempStation.number_of_workshops;
-                file >> tempStation.number_of_working_workshops;
-                file >> tempStation.Efficiency;
-                stationsMap.insert(pair<int, Station>(stationsMap.size(), tempStation));
+
+                int id;
+                file >> id;
+
+                string name;
+                file >> name;
+
+                int numberOfWorkshops;
+                file >> numberOfWorkshops;
+
+                int numberOfWorkingWorkshops;
+                file >> numberOfWorkingWorkshops;
+
+                double efficiency;
+                file >> efficiency;
+
+                Station::id = id + 1;
+
+                Station s = Station(name, numberOfWorkshops, numberOfWorkingWorkshops, efficiency);
+                stationsMap.insert(pair<int, Station>(id, s));
             }
         }
     }
     cout << "Loaded\n";
 }
 
-vector<int> search(map<int, Pipe>& pipesMap) {
+vector<int> search(const map<int, Pipe>& pipesMap) {
 
     vector<int> vectorID;
 
@@ -145,10 +191,7 @@ vector<int> search(map<int, Pipe>& pipesMap) {
         }
         break;
     case 2:
-        do
-        {
-            isWorking = inputInteger();
-        } while (isWorking < 0 || isWorking > 1);
+        isWorking = choose(1);
         for (auto& item : pipesMap)
             if (item.second.isWorking == isWorking)
                 vectorID.push_back(item.first);
@@ -162,7 +205,7 @@ vector<int> search(map<int, Pipe>& pipesMap) {
     return vectorID;
 }
 
-vector<int> search(map<int, Station>& stationsMap) {
+vector<int> search(const map<int, Station>& stationsMap) {
     vector<int> vectorID;
     if (stationsMap.size() == 0)
         return vectorID;
@@ -205,11 +248,11 @@ vector<int> search(map<int, Station>& stationsMap) {
 
         if (choose == 1)
             for (auto& item : stationsMap)
-                if ((1.0 * item.second.number_of_working_workshops / (1.0 * item.second.number_of_workshops)) * 100 < percentOfWorkshops)
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100 < percentOfWorkshops)
                     vectorID.push_back(item.first);
         else if (choose == 2)
             for (auto& item : stationsMap)
-                if ((1.0 * item.second.number_of_working_workshops / (1.0 * item.second.number_of_workshops)) * 100 >= percentOfWorkshops)
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100 >= percentOfWorkshops)
                     vectorID.push_back(item.first);
         break;
     default:
@@ -221,6 +264,31 @@ vector<int> search(map<int, Station>& stationsMap) {
     return vectorID;
 }
 
+//void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
+//
+//    if (vectorID.size() == 0)
+//        return;
+//
+//    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
+//    switch (choose(1)) {
+//    case 0:
+//        for (auto& item : pipesMap) {
+//            item.second.PipeEdit();
+//        }
+//        break;
+//    case 1:
+//        for (int id : vectorID)
+//            pipesMap[id].Output();  
+//        
+//        cout << "Do you want to change \n0) All\n1)set";
+//            
+//        for (int id : vectorID) {
+//            pipesMap[id].PipeEdit();
+//        }
+//        break;
+//    }
+//}
+
 void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
     cout << "Edit all or set of stations?\n0) all\n 1)set\n";
     switch (choose(1)) {
@@ -230,19 +298,37 @@ void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
         }
         break;
     case 1:
+
         for (int id : vectorID)
-            pipesMap[id].Output;
-        
-        cout << "Do you want to change \n0) All\n1)set";
-            
-        for (int id : vectorID) {
-            pipesMap[id].PipeEdit();
+            pipesMap[id].Output();
+
+        cout << "Input id(s), which you want to change\nInput 0, if you want to break\n";
+
+        set<int> tempSet;
+
+        int choice;
+
+        do {
+            choice = choose(pipesMap.size());
+            if (choice == 0)
+                break;
+            tempSet.insert(choice);
+        } while (choice == 0);
+
+        cout << "Is working? (0 - false, 1 - true)\n";
+
+        bool isWorking = choose(1);  // Is it a correct name?
+
+        for (int id : tempSet) {
+            pipesMap[id].isWorking = isWorking;  
         }
-        break;
     }
 }
 
 void filtration(map<int, Station>& stationsMap, vector<int> vectorID) {
+    if (vectorID.size() == 0)
+        return;
+
     cout << "Edit all or set of stations?\n0) all\n 1)set\n";
     switch (choose(1)) {
     case 0:
