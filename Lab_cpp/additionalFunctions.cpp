@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+     #include <iostream>
 #include <string>
 #include <fstream>
 #include <map>
@@ -32,7 +32,6 @@ int inputInteger() {
     cin >> str;
     if (str.find_first_not_of("0123456789") != string::npos) {
         cout << "Wrong input\n";
-        cout << "Try again: \n";
     }
     else {
         return stoi(str);
@@ -57,10 +56,13 @@ double inputDouble() {
 int choose(int number) {
     int result;
     do {
-        return inputInteger();
-        cout << "Wrong input";
+        result = inputInteger();
+        if (result < 0 || result > number)
+            cout << "Out of range\n";
     }
     while (result < 0 || result > number); 
+    
+    return result;
 }
 
 void Save(const map<int, Pipe>& pipesMap, const map<int, Station>& stationsMap) {
@@ -132,11 +134,8 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
                 bool isWorking;
                 file >> isWorking;
 
-                Pipe::id = id;
-
-                Pipe p = Pipe(name, diameter, length, isWorking);
-                pipesMap.insert(pair<int, Pipe>(id, p));
-
+                pipesMap.insert(pair<int, Pipe>(id, Pipe(name, diameter, length, isWorking)));
+                Pipe::setId(++id);
                 // pipesMap[id] = Pipe(name, diameter, length, isWorking);  Why is it cause 2 constructor?
             }
 
@@ -154,13 +153,11 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
                 int numberOfWorkingWorkshops;
                 file >> numberOfWorkingWorkshops;
 
-                double efficiency;
+                int efficiency;
                 file >> efficiency;
 
-                Station::id = id;
-
-                Station s = Station(name, numberOfWorkshops, numberOfWorkingWorkshops, efficiency);
-                stationsMap.insert(pair<int, Station>(id, s));
+                stationsMap.insert(pair<int, Station>(id, Station(name, numberOfWorkshops, numberOfWorkingWorkshops, efficiency)));
+                Station::setId(++id);
             }
         }
         cout << "Loaded\n";
@@ -171,22 +168,22 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap) {
 }
 
 vector<int> search(const map<int, Pipe>& pipesMap) {
-
     vector<int> vectorID;
 
     if (pipesMap.size() == 0)
         return vectorID;
 
-    cout << "Filter by:\n1) name\n2) is working?\n0) Exit\n";
+    cout << "\nSearch by:\n1) name\n2) is working?\n0) Exit\n";
 
     string name;
     bool isWorking;
+
     switch (choose(2))
     {
     case 0:
         return vectorID;
     case 1:
-        cout << "Input name:\n";
+        cout << "\nInput name:\n";
         cin >> name;
         for (auto& item : pipesMap) {
             if (item.second.name == name) {
@@ -195,6 +192,7 @@ vector<int> search(const map<int, Pipe>& pipesMap) {
         }
         break;
     case 2:
+        cout << "\nIs working?\n0) No\n1) Yes\n";
         isWorking = choose(1);
         for (auto& item : pipesMap)
             if (item.second.isWorking == isWorking)
@@ -206,23 +204,24 @@ vector<int> search(const map<int, Pipe>& pipesMap) {
     cout << "ID: ";
     for (int i : vectorID)
         cout << i << "  ";
+    cout << "\n";
     return vectorID;
 }
 
 vector<int> search(const map<int, Station>& stationsMap) {
     vector<int> vectorID;
+
     if (stationsMap.size() == 0)
         return vectorID;
 
-    int choose;
-    cout << "\nFilter by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
-    do
-        choose = inputInteger();
-    while (choose < 0 || choose > 2);
+    int choice;
+    cout << "\nSearch by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
+    
+    choice = choose(2);
 
     string name;
     double percentOfWorkshops;
-    switch (choose)
+    switch (choice)
     {
     case 0:
         return vectorID;
@@ -236,7 +235,7 @@ vector<int> search(const map<int, Station>& stationsMap) {
         }
         break;
     case 2:
-        cout << "\nInput percent of non working stations\n";
+        cout << "\nInput percent of non working stations or 0 to exit\n";
         do
         {
             percentOfWorkshops = inputDouble();
@@ -244,19 +243,19 @@ vector<int> search(const map<int, Station>& stationsMap) {
         if (percentOfWorkshops == 0)
             return vectorID;
         
-        do
-        {
-            cout << "\n1) less\n2) more\n0) exit\n";
-            choose = inputInteger();
-        } while (choose < 0 || choose > 2);
+        cout << "\n1) less\n2) more\n0) exit\n";
+        choice = choose(2);
 
-        if (choose == 1)
-            for (auto& item : stationsMap)
-                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100 < percentOfWorkshops)
+        if (choice == 1)
+            for (auto& item : stationsMap) {
+                cout << (1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0;
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0 < percentOfWorkshops)
                     vectorID.push_back(item.first);
-        else if (choose == 2)
+            }
+                
+        else if (choice == 2)
             for (auto& item : stationsMap)
-                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100 >= percentOfWorkshops)
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0 >= percentOfWorkshops)
                     vectorID.push_back(item.first);
         break;
     default:
@@ -265,67 +264,55 @@ vector<int> search(const map<int, Station>& stationsMap) {
     cout << "ID: ";
     for (int i : vectorID)
         cout << i << "  ";
+    cout << "\n";
     return vectorID;
 }
 
-//void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
-//
-//    if (vectorID.size() == 0)
-//        return;
-//
-//    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
-//    switch (choose(1)) {
-//    case 0:
-//        for (auto& item : pipesMap) {
-//            item.second.PipeEdit();
-//        }
-//        break;
-//    case 1:
-//        for (int id : vectorID)
-//            pipesMap[id].Output();  
-//        
-//        cout << "Do you want to change \n0) All\n1)set";
-//            
-//        for (int id : vectorID) {
-//            pipesMap[id].PipeEdit();
-//        }
-//        break;
-//    }
-//}
-
 void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID) {
-    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
+    cout << "\nEdit all or set of stations?\n0) all\n1) set\n";
+
     switch (choose(1)) {
     case 0:
-        for (auto& item : pipesMap) {
-            item.second.PipeEdit();
+
+        //for (int id : vectorID) {
+        //    cout << "Id: " << id;
+        //    pipesMap[id].Output();
+        //    pipesMap[id].edit();
+        //}
+        
+        for (int id : vectorID) {
+            cout << "\nId: " << id;
+            pipesMap[id].Output();
+            pipesMap[id].isWorking = !pipesMap[id].isWorking;
         }
+
         break;
     case 1:
 
-        for (int id : vectorID)
+        for (int id : vectorID) {
+            cout << "\nId: " << id;
             pipesMap[id].Output();
+        }
 
-        cout << "Input id(s), which you want to change\nInput 0, if you want to break\n";
+        cout << "\nInput id(s), which you want to change or 0 to exit\n";
 
-        set<int> tempSet;
-
+        set<int> setOfChangeable;
         int choice;
 
         do {
             choice = choose(pipesMap.size());
             if (choice == 0)
                 break;
-            tempSet.insert(choice);
-        } while (choice == 0);
+            if (find(vectorID.begin(), vectorID.end(), choice) != vectorID.end())
+                setOfChangeable.insert(choice);
+            else
+                cout << "Out of set\n";
+        } while (choice != 0);
 
-        cout << "Is working? (0 - false, 1 - true)\n";
-
-        bool isWorking = choose(1);  // Is it a correct name?
-
-        for (int id : tempSet) {
-            pipesMap[id].isWorking = isWorking;  
+        for (int id : setOfChangeable) {
+            pipesMap[id].isWorking = !pipesMap[id].isWorking;  
         }
+        break;
     }
 }
 
@@ -333,16 +320,41 @@ void filtration(map<int, Station>& stationsMap, vector<int> vectorID) {
     if (vectorID.size() == 0)
         return;
 
-    cout << "Edit all or set of stations?\n0) all\n 1)set\n";
+    cout << "Edit all or set of stations?\n0) all\n1) set\n";
     switch (choose(1)) {
     case 0:
-        for (auto& item : stationsMap) {
-            item.second.StationEdit();
+        for (int id : vectorID) {
+            cout << "Id: " << id;
+            stationsMap[id].Output();
+            stationsMap[id].edit();
         }
         break;
+
     case 1:
-        for (int id : vectorID) {   
-            stationsMap[id].StationEdit();
+
+        for (int id : vectorID) {
+            cout << "\nId: " << id;
+            stationsMap[id].Output();
+        }
+
+        cout << "\nInput id(s), which you want to change or 0 to exit\n";
+
+        set<int> setOfChangeable;
+        int choice;
+
+        do {
+            choice = choose(stationsMap.size());
+            if (choice == 0)
+                break;
+            if (find(vectorID.begin(), vectorID.end(), choice) != vectorID.end())
+                setOfChangeable.insert(choice);
+            else
+                cout << "Out of set\n";
+        } while (choice != 0);
+
+        for (int id : setOfChangeable) {
+            stationsMap[id].Output();
+            stationsMap[id].edit();
         }
         break;
     }

@@ -16,7 +16,7 @@ public:
 
     ~Pipe();
 
-    void PipeEdit();
+    void edit();
 
     void Output();
 

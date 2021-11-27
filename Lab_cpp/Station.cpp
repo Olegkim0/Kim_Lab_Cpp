@@ -54,24 +54,19 @@ Station::~Station()
 {
 }
 
-void Station::StationEdit() {
-    cout << "Editing station\n";
-    cout << "Input number of working workshops:\n";
-    numberOfWorkingWorkshops = -1;
-    while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops) {
-        numberOfWorkingWorkshops = inputInteger();
-        if (numberOfWorkingWorkshops > numberOfWorkshops) {
-            cout << "Wrong input\n";
-            cout << "Try again:\n";
-        }
-    }
-}
-
 void Station::Output() {
     cout << "\nname: " << name;
     cout << "\nnumber of workshops: " << numberOfWorkshops;
     cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
     cout << "\nEfficiency: " << efficiency << "\n";
+}
+
+void Station::edit() {
+    cout << "Editing station\n";
+    cout << "Input number of working workshops:\n";
+    do {
+        numberOfWorkingWorkshops = choose(numberOfWorkshops);
+    } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);
 }
 
 void Station::setId(int newID) {

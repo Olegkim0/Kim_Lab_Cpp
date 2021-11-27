@@ -16,13 +16,14 @@ public:
 
     ~Station();
 
-    void StationEdit();
-
     void Output();
+
+    void edit();
 
     static void setId(int newID);
 
     static int getId();
+
 private:
     static int id;
 };

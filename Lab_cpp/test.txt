@@ -3,7 +3,7 @@ Pipe:
 qwe
 123
 123
-1
+0
 Pipe:
 2
 asd

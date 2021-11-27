@@ -21,7 +21,7 @@ void Load(map<int, Pipe>& pipesMap, map<int, Station>& stationsMap);
 vector<int> search(const map<int, Pipe>& pipesMap);
 
 vector<int> search(const map<int, Station>& stationsMap);
-
+	
 void filtration(map<int, Pipe>& pipesMap, vector<int> vectorID);
 
 void filtration(map<int, Station>& stationsMap, vector<int> vectorID);

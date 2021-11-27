@@ -20,6 +20,8 @@ int main()
     std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
     std::map<int, Station>::iterator stationsIterator;
 
+    vector<int> vectorID;
+
     while (true) {
         printMenu();
         switch (choose(11)) {
@@ -56,7 +58,7 @@ int main()
             pipesIterator = mapOfPipes.find(tempID);
             
             if (pipesIterator != mapOfPipes.end())
-                mapOfPipes[tempID].PipeEdit();
+                mapOfPipes[tempID].edit();
             else
             {
                 cout << "\nWrong ID\n";
@@ -73,19 +75,21 @@ int main()
             stationsIterator = mapOfStation.find(tempID);
 
             if (stationsIterator != mapOfStation.end())
-                mapOfStation[tempID].StationEdit();
+                mapOfStation[tempID].edit();
             else
             {
                 cout << "\nWrong ID\n";
             }
             break;
         case 6:
-            if (mapOfPipes.size() != 0)
+            cout << "Input ID or 0 to exit]\n";
+            if (mapOfPipes.size() != 0 )
                 mapOfPipes.erase(choose(mapOfPipes.size() - 1));
             else
                 cout << "No pipes";
             break;
         case 7:
+            cout << "Input ID or 0 to exit]\n";
             if (mapOfStation.size() != 0)
                 mapOfStation.erase(choose(mapOfStation.size() - 1));
             else
