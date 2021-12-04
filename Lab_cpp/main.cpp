@@ -1,8 +1,5 @@
 #pragma once
-#include "Pipe.h"
-#include "Station.h"
-#include "additionalFunctions.h"
-#include <iostream>
+#include "Network.h"
 
 using namespace std;
 
@@ -11,14 +8,12 @@ int Station::id = 0;
 
 int main()
 {
-    map<int, Pipe> mapOfPipes;
-    map<int, Station> mapOfStation;
-    vector<int> pipesVectorID;
-    vector<int> stationsVectorID;
+    Network net;
+
+    unordered_map<int, Pipe> mapOfPipes;
+    unordered_map<int, Station> mapOfStation;
 
     int tempID;
-    std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
-    std::map<int, Station>::iterator stationsIterator;
 
     vector<int> vectorID;
 
@@ -29,85 +24,55 @@ int main()
             cout << "\nExit\n";
             return 0;
         case 1:
-            mapOfPipes.insert(pair<int, Pipe>(Pipe::getId(), Pipe()));
+            net.pipesMap.insert(pair<int, Pipe>(Pipe::id, Pipe()));
             break;
         case 2:
-            mapOfStation.insert(pair<int, Station>(Station::getId(), Station()));
+            net.stationsMap.insert(pair<int, Station>(Station::id, Station()));
             break;
         case 3:
-            cout << "\nOutput Pipe(s)";
-            for (auto &item : mapOfPipes) {
-                cout << "\nID: " << item.first;
-                item.second.Output();
-            }
-            
-            cout << "\nOutput station(s)";
-            for (auto &item : mapOfStation) {
-                cout << "\nID: " << item.first;
-                item.second.Output();
-            }    
+            net.output();
             break;
         case 4:
-            cout << "\ninput id\n";
-            tempID = inputInteger();
-            while (tempID > Pipe::getId())
-            {
-                cout << "\nWrong input\n";
-                tempID = inputInteger();
-            }
-            pipesIterator = mapOfPipes.find(tempID);
-            
-            if (pipesIterator != mapOfPipes.end())
+            cout << "\ninput id or 0 to exit\n";
+            tempID = choose(Pipe::id);
+            if (mapOfPipes.count(tempID))
                 mapOfPipes[tempID].edit();
-            else
-            {
-                cout << "\nWrong ID\n";
-            }
             break;
-        case 5:
-            cout << "\ninput id\n";
-            tempID = inputInteger();
-            while (tempID > Station::getId())
-            {
-                cout << "\nWrong input\n";
-                tempID = inputInteger();
-            }
-            stationsIterator = mapOfStation.find(tempID);
 
-            if (stationsIterator != mapOfStation.end())
+        case 5: 
+            cout << "\ninput id\n";
+            tempID = choose(Pipe::id);
+            if (mapOfStation.count(tempID))
                 mapOfStation[tempID].edit();
-            else
-            {
-                cout << "\nWrong ID\n";
-            }
             break;
         case 6:
             cout << "Input ID or 0 to exit]\n";
             if (mapOfPipes.size() != 0 )
-                mapOfPipes.erase(choose(mapOfPipes.size() - 1));
+                mapOfPipes.erase(choose(Pipe::id));
             else
                 cout << "No pipes";
             break;
         case 7:
             cout << "Input ID or 0 to exit]\n";
             if (mapOfStation.size() != 0)
-                mapOfStation.erase(choose(mapOfStation.size() - 1));
+                mapOfStation.erase(choose(Station::id));
             else
                 cout << "No stations";
             break;
         case 8:
-            filtration(mapOfPipes, search(mapOfPipes));
-            pipesVectorID.clear();
+            //net.filtration(net.search<unordered_map<int, Pipe>(net.pipesMap));  //  devide search and filtration and ask user about change
+            //net.search(net.pipesMap);
             break;
         case 9:
-            filtration(mapOfStation, search(mapOfStation));
-            stationsVectorID.clear();
+            //net.filtration(net.search(net.pipesMap));  //  devide search and filtration and ask user about change
+
+            //filtration(mapOfStation, search(mapOfStation));
             break;
         case 10:
-            Save(mapOfPipes, mapOfStation);
+            //net.save();
             break;
         case 11:
-            Load(mapOfPipes, mapOfStation);
+            //net.load();
             break;
         case 12:
             //  tests

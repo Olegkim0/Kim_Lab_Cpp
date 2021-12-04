@@ -1,10 +1,5 @@
 #pragma once
-#include <iostream>
 #include "Station.h"
-#include "additionalFunctions.h"
-
-
-using namespace std;
 
 Station::Station()
 {
@@ -54,7 +49,7 @@ Station::~Station()
 {
 }
 
-void Station::Output() {
+void Station::output() {
     cout << "\nname: " << name;
     cout << "\nnumber of workshops: " << numberOfWorkshops;
     cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
@@ -67,12 +62,4 @@ void Station::edit() {
     do {
         numberOfWorkingWorkshops = choose(numberOfWorkshops);
     } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);
-}
-
-void Station::setId(int newID) {
-    id = newID;
-}
-
-int Station::getId() {
-    return id;
 }

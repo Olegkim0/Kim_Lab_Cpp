@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "additionalFunctions.h"
+#include <iostream>
 
 using namespace std;
 
@@ -9,6 +11,7 @@ public:
     int diameter;
     double length;
     bool isWorking;
+    static int id;
 
     Pipe();
 
@@ -18,14 +21,9 @@ public:
 
     void edit();
 
-    void Output();
+    void output();
 
-    static void setId(int newID);
-
-    static int getId();
 private:
-    static int id;
-
 };  
 
 

@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "additionalFunctions.h"
+#include <iostream>
 
 using namespace std;
 
@@ -9,6 +11,7 @@ public:
     int numberOfWorkshops;
     int numberOfWorkingWorkshops;
     int efficiency;
+    static int id;
 
     Station();
 
@@ -16,14 +19,10 @@ public:
 
     ~Station();
 
-    void Output();
+    void output();
 
     void edit();
 
-    static void setId(int newID);
-
-    static int getId();
 
 private:
-    static int id;
 };
