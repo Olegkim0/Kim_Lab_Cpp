@@ -24,6 +24,9 @@ public:
 	void load();
 
 	template <typename classType>
+	void deleting(unordered_map<int, classType>& map);
+
+	template <typename classType>
 	void editObjectById(unordered_map<int, classType>& map);
 
 	template <typename classType>
@@ -43,6 +46,22 @@ inline void Network::outputMap(unordered_map<int, classType>& map)
 			item.second.output();
 		}
 	}
+}
+
+template<typename classType>
+inline void Network::deleting(unordered_map<int, classType>& map) {
+	cout << "\nInput ID(s) or 0 to exit\n";
+	
+	int choice;
+	do {
+		choice = choose(classType::id);
+		if (choice == 0)
+			break;
+		if (map.count(choice))
+			map.erase(choice);
+		else
+			cout << "Out of map\n";
+	} while (choice != 0);
 }
 
 template<typename classType>

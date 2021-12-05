@@ -35,21 +35,11 @@ int main()
             break;
         case 6:
             net.outputMap(net.pipesMap);
-            if (net.pipesMap.size() != 0) {
-                cout << "\nInput ID or 0 to exit\n";
-                net.pipesMap.erase(choose(Pipe::id));
-            }
-            else
-                cout << "No pipes";
+            net.deleting(net.pipesMap);
             break;
         case 7:
             net.outputMap(net.stationsMap);
-            if (net.stationsMap.size() != 0) {
-                cout << "\nInput ID or 0 to exit\n";
-                net.stationsMap.erase(choose(Station::id));
-            }
-            else
-                cout << "No stations";
+            net.deleting(net.stationsMap);
             break;
         case 8:
             net.filtration(net.pipesMap, net.search(net.pipesMap));

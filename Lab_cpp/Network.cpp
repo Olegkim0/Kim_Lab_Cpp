@@ -118,3 +118,4 @@ void Network::load() {
         cout << "File not found 404\n";
     }
 }
+
