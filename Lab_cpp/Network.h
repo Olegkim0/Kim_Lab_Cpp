@@ -27,6 +27,9 @@ public:
 	void deleting(unordered_map<int, classType>& map);
 
 	template <typename classType>
+	void editing(unordered_map<int, classType>& map);
+
+	template <typename classType>
 	void editObjectById(unordered_map<int, classType>& map);
 
 	template <typename classType>
@@ -50,6 +53,7 @@ inline void Network::outputMap(unordered_map<int, classType>& map)
 
 template<typename classType>
 inline void Network::deleting(unordered_map<int, classType>& map) {
+	Network::outputMap(map);
 	cout << "\nInput ID(s) or 0 to exit\n";
 	
 	int choice;
@@ -62,6 +66,29 @@ inline void Network::deleting(unordered_map<int, classType>& map) {
 		else
 			cout << "Out of map\n";
 	} while (choice != 0);
+}
+
+template<typename classType>
+inline void Network::editing(unordered_map<int, classType>& map) {
+	Network::outputMap(map);
+	cout << "\nInput ID(s) or 0 to continue\n";
+
+	set<int> setID;
+	int choice;
+	do {
+		choice = choose(classType::id);
+		if (choice == 0)
+			break;
+		if (map.count(choice))
+			setID.insert(choice);
+		else
+			cout << "Out of map\n";
+	} while (choice != 0);
+	
+	for (int i : setID) {
+		cout << "\nID: " << i;
+		map[i].edit();
+	}
 }
 
 template<typename classType>

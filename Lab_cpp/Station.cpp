@@ -64,7 +64,6 @@ void Station::output() {
 
 void Station::edit() {
     cout << "\nEditing station";
-    cout << "\nID: " << id;
     Station::output();
     cout << "\nInput number of working workshops:\n";
     do {
