@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-#include "additionalFunctions.h"
-#include <iostream>
 
 using namespace std;
 
@@ -19,10 +17,9 @@ public:
 
     ~Station();
 
-    void output();
+    void Output();
 
     void edit();
-
 
 private:
 };

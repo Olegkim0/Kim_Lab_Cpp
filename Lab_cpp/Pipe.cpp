@@ -1,5 +1,8 @@
 #pragma once
+#include <iostream>
 #include "Pipe.h"
+#include "additionalFunctions.h"
+
 
 using namespace std;
 
@@ -50,9 +53,10 @@ void Pipe::edit() {
     cout << "Is pipe working? " << isWorking << "\n";
 }
 
-void Pipe::output() {
+void Pipe::Output() {
     cout << "\nName: " << name;
     cout << "\nDiameter: " << diameter;
     cout << "\nLength: " << length;
     cout << "\nIs working?: " << isWorking << "\n";
 }
+

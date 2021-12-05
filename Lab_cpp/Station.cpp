@@ -1,5 +1,10 @@
 #pragma once
+#include <iostream>
 #include "Station.h"
+#include "additionalFunctions.h"
+
+
+using namespace std;
 
 Station::Station()
 {
@@ -49,7 +54,7 @@ Station::~Station()
 {
 }
 
-void Station::output() {
+void Station::Output() {
     cout << "\nname: " << name;
     cout << "\nnumber of workshops: " << numberOfWorkshops;
     cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
