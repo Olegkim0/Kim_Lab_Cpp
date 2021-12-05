@@ -1,26 +1,8 @@
 #include "Network.h"
 
 void Network::output() {
-
-    if (!pipesMap.size() && !stationsMap.size()) {
-        cout << "No pipes and stations";
-        return;
-    }
-	if (pipesMap.size()) {
-        cout << "\nOutput Pipe(s)";
-        for (auto& item : pipesMap) {
-            cout << "\nID: " << item.first;
-            item.second.Output();
-        }
-	}
-    
-    if (stationsMap.size()) {
-        cout << "\nOutput station(s)";
-        for (auto& item : stationsMap) {
-            cout << "\nID: " << item.first;
-            item.second.Output();
-        }
-    }
+    Network::outputMap(pipesMap);
+    Network::outputMap(stationsMap);
 }
 
 void Network::save() {

@@ -54,7 +54,8 @@ Station::~Station()
 {
 }
 
-void Station::Output() {
+void Station::output() {
+    cout << "\nStation:";
     cout << "\nname: " << name;
     cout << "\nnumber of workshops: " << numberOfWorkshops;
     cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
@@ -62,8 +63,10 @@ void Station::Output() {
 }
 
 void Station::edit() {
-    cout << "Editing station\n";
-    cout << "Input number of working workshops:\n";
+    cout << "\nEditing station";
+    cout << "\nID: " << id;
+    Station::output();
+    cout << "\nInput number of working workshops:\n";
     do {
         numberOfWorkingWorkshops = choose(numberOfWorkshops);
     } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);

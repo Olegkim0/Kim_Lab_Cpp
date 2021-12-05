@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include "Pipe.h"
 #include "additionalFunctions.h"
@@ -43,17 +42,19 @@ Pipe::~Pipe()
 }
 
 void Pipe::edit() {
-    cout << "is working?\n0) No\n1) Yes\n";
-    int choice = choose(1);
-        if (choice == 0)
-            isWorking = false;
-        else if (choice == 1)
-            isWorking = true;
-    cout << "Pipe edited\n";
-    cout << "Is pipe working? " << isWorking << "\n";
+    isWorking = !isWorking;
+    //cout << "is working?\n0) No\n1) Yes\n";
+    //int choice = choose(1);
+    //    if (choice == 0)
+    //        isWorking = false;
+    //    else if (choice == 1)
+    //        isWorking = true;
+    //cout << "Pipe edited\n";
+    //cout << "Is pipe working? " << isWorking << "\n";
 }
 
-void Pipe::Output() {
+void Pipe::output() {
+    cout << "\nPipe:";
     cout << "\nName: " << name;
     cout << "\nDiameter: " << diameter;
     cout << "\nLength: " << length;

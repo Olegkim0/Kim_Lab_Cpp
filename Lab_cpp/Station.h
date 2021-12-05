@@ -17,7 +17,7 @@ public:
 
     ~Station();
 
-    void Output();
+    void output();
 
     void edit();
 

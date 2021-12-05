@@ -19,7 +19,7 @@ public:
 
     void edit();
 
-    void Output();
+    void output();
 
 private:
 

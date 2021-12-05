@@ -1,8 +1,4 @@
 #pragma once
-#include "Pipe.h"
-#include "Station.h"
-#include "additionalFunctions.h"
-#include <iostream>
 #include "Network.h"
 
 using namespace std;
@@ -12,16 +8,7 @@ int Station::id = 0;
 
 int main()
 {
-    map<int, Pipe> mapOfPipes;
-    map<int, Station> mapOfStation;
-    vector<int> pipesVectorID;
-    vector<int> stationsVectorID;
-
     Network net;
-
-    int tempID;
-    std::map<int, Pipe>::iterator pipesIterator;  //  https://www.cplusplus.com/reference/map/map/find/
-    std::map<int, Station>::iterator stationsIterator;
 
     vector<int> vectorID;
 
@@ -41,70 +28,40 @@ int main()
             net.output();
             break;
         case 4:
-            cout << "\ninput id\n";
-            tempID = inputInteger();
-            while (tempID > Pipe::id)
-            {
-                cout << "\nWrong input\n";
-                tempID = inputInteger();
-            }
-            pipesIterator = mapOfPipes.find(tempID);
-            
-            if (pipesIterator != mapOfPipes.end())
-                mapOfPipes[tempID].edit();
-            else
-            {
-                cout << "\nWrong ID\n";
-            }
+            net.editObjectById(net.pipesMap);
             break;
         case 5:
-            cout << "\ninput id\n";
-            tempID = inputInteger();
-            while (tempID > Station::id)
-            {
-                cout << "\nWrong input\n";
-                tempID = inputInteger();
-            }
-            stationsIterator = mapOfStation.find(tempID);
-
-            if (stationsIterator != mapOfStation.end())
-                mapOfStation[tempID].edit();
-            else
-            {
-                cout << "\nWrong ID\n";
-            }
+            net.editObjectById(net.stationsMap);
             break;
         case 6:
-            cout << "Input ID or 0 to exit]\n";
-            if (mapOfPipes.size() != 0 )
-                mapOfPipes.erase(choose(mapOfPipes.size() - 1));
+            net.outputMap(net.pipesMap);
+            if (net.pipesMap.size() != 0) {
+                cout << "\nInput ID or 0 to exit\n";
+                net.pipesMap.erase(choose(Pipe::id));
+            }
             else
                 cout << "No pipes";
             break;
         case 7:
-            cout << "Input ID or 0 to exit]\n";
-            if (mapOfStation.size() != 0)
-                mapOfStation.erase(choose(mapOfStation.size() - 1));
+            net.outputMap(net.stationsMap);
+            if (net.stationsMap.size() != 0) {
+                cout << "\nInput ID or 0 to exit\n";
+                net.stationsMap.erase(choose(Station::id));
+            }
             else
                 cout << "No stations";
             break;
         case 8:
-            filtration(mapOfPipes, search(mapOfPipes));
-            pipesVectorID.clear();
+            net.filtration(net.pipesMap, net.search(net.pipesMap));
             break;
         case 9:
-            filtration(mapOfStation, search(mapOfStation));
-            stationsVectorID.clear();
+            net.filtration(net.stationsMap, net.search(net.stationsMap));
             break;
         case 10:
             net.save();
             break;
         case 11:
             net.load();
-            //Load(mapOfPipes, mapOfStation);
-            break;
-        case 12:
-            //  tests
             break;
         default:
             break;
