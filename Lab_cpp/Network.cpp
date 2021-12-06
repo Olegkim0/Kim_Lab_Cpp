@@ -119,3 +119,104 @@ void Network::load() {
     }
 }
 
+/*vector<int> Network::search(unordered_map<int, Pipe>& map) {
+    vector<int> vectorID;
+    if (map.size() == 0) {
+        cout << "Map is empty";
+        return vectorID;
+    }
+
+    cout << "\nSearch by:\n1) name\n2) is working?\n0) Exit\n";
+
+    string name;
+    bool isWorking;
+    switch (choose(2))
+    {
+    case 0:
+        return vectorID;
+    case 1:
+        cout << "\nInput name:\n";
+        cin >> name;
+        for (auto& item : pipesMap) {
+            if (item.second.name == name) {
+                vectorID.push_back(item.first);
+            }
+        }
+        break;
+    case 2:
+        cout << "\nIs working?\n0) No\n1) Yes\n";
+        isWorking = choose(1);
+        for (auto& item : pipesMap)
+            if (item.second.isWorking == isWorking)
+                vectorID.push_back(item.first);
+        break;
+    default:
+        break;
+    }
+    cout << "ID: ";
+    for (int i : vectorID)
+        cout << i << "  ";
+    cout << "\n";
+}
+*/
+
+/*vector<int> Network::search(unordered_map<int, Station>& map) {
+    vector<int> vectorID;
+    if (map.size() == 0) {
+        cout << "Map is empty";
+        return vectorID;
+    }
+
+    cout << "\nSearch by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
+
+    string name;
+    double percentOfWorkshops;
+    switch (choose(2))
+    {
+    case 0:
+        return vectorID;
+    case 1:
+        cout << "\nInput name:\n";
+        cin >> name;
+        for (auto& item : stationsMap) {
+            if (item.second.name == name) {
+                vectorID.push_back(item.first);
+            }
+        }
+        break;
+    case 2:
+        cout << "\nInput percent of non working stations or 0 to exit\n";
+        do
+        {
+            percentOfWorkshops = inputDouble();
+        } while (percentOfWorkshops <= 0 || percentOfWorkshops > 100);
+        if (percentOfWorkshops == 0)
+            return vectorID;
+
+        cout << "\n1) less\n2) more\n0) exit\n";
+        switch (choose(2)) {
+        case 0:
+            return vectorID;
+        case 1:
+            for (auto& item : stationsMap) {
+                cout << (1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0;
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0 < percentOfWorkshops)
+                    vectorID.push_back(item.first);
+            }
+            break;
+        case 2:
+            for (auto& item : stationsMap)
+                if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0 >= percentOfWorkshops)
+                    vectorID.push_back(item.first);
+            break;
+        }
+
+    default:
+        break;
+    }
+    cout << "ID: ";
+    for (int i : vectorID)
+        cout << i << "  ";
+    cout << "\n";
+}
+*/

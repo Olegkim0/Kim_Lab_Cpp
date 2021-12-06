@@ -20,7 +20,7 @@ void printMenu() {
 
 int inputInteger() {
     string str;
-    cin.ignore();
+    
     cin >> str;
     if (str.find_first_not_of("0123456789") != string::npos) {
         cout << "Wrong input\n";
@@ -28,6 +28,7 @@ int inputInteger() {
     else {
         return stoi(str);
     }
+    cin.ignore();
     return -1;
 }
 
@@ -51,9 +52,7 @@ int choose(int number) {
         result = inputInteger();
         if (result < 0 || result > number)
             cout << "Out of range\n";
-    }
-    while (result < 0 || result > number); 
+    } while (result < 0 || result > number); 
     
     return result;
 }
-

@@ -10,8 +10,6 @@ int main()
 {
     Network net;
 
-    vector<int> vectorID;
-
     while (true) {
         printMenu();
         switch (choose(11)) {

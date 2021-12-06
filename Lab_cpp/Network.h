@@ -23,6 +23,10 @@ public:
 
 	void load();
 
+	//vector<int> search(unordered_map<int, Pipe>& map);
+
+	//vector<int> search(unordered_map<int, Station>& map);
+
 	template <typename classType>
 	void deleting(unordered_map<int, classType>& map);
 
@@ -101,7 +105,7 @@ inline void Network::editObjectById(unordered_map<int, classType>& map) {
 			map[tempID].edit();
 		}
 		else {
-			cout << "\nwrong id\n";
+			cout << "\nWrong id\n";
 		}
 	}
 }
@@ -143,7 +147,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		default:
 			break;
 		}
-		cout << "ID: ";
+		cout << "\nID: ";
 		for (int i : vectorID)
 			cout << i << "  ";
 		cout << "\n";
@@ -196,7 +200,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		default:
 			break;
 		}
-		cout << "ID: ";
+		cout << "\nID: ";
 		for (int i : vectorID)
 			cout << i << "  ";
 		cout << "\n";
