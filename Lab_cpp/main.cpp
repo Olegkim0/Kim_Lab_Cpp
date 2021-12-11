@@ -12,9 +12,9 @@ int main()
 
     while (true) {
         printMenu();
-        switch (choose(11)) {
+        switch (choose(14)) {
         case 0:
-            cout << "\nExit\n";
+            std::cout << "\nExit\n";
             return 0;
         case 1:
             net.pipesMap.insert(pair<int, Pipe>(Pipe::id, Pipe()));
@@ -51,6 +51,14 @@ int main()
         case 11:
             net.load();
             break;
+        case 12:
+            net.connect();
+            break;
+        case 13:
+            net.disconnect();
+            break;
+        case 14:
+            net.topologicalSort(net.pipesMap, net.stationsMap);
         default:
             break;
         }

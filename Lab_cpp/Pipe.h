@@ -10,6 +10,8 @@ public:
     double length;
     bool isWorking;
     static int id;
+    int startID = 0;
+    int endID = 0;
 
     Pipe();
 

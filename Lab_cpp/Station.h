@@ -9,6 +9,8 @@ public:
     int numberOfWorkshops;
     int numberOfWorkingWorkshops;
     int efficiency;
+    int numberOfInPipes = 0;
+    int numberOfOutPipes = 0;
     static int id;
 
     Station();

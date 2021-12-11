@@ -23,12 +23,22 @@ public:
 
 	void load();
 
-	//vector<int> search(unordered_map<int, Pipe>& map);
+	void connect();
 
-	//vector<int> search(unordered_map<int, Station>& map);
+	void disconnect();
 
-	template <typename classType>
-	void deleting(unordered_map<int, classType>& map);
+	void topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap);
+
+	vector<int> search(unordered_map<int, Pipe>& map);
+
+	vector<int> search(unordered_map<int, Station>& map);
+
+	void deleting(unordered_map<int, Pipe>& map);
+
+	void deleting(unordered_map<int, Station>& map);
+
+	//template <typename classType>
+	//void deleting(unordered_map<int, classType>& map);
 
 	template <typename classType>
 	void editing(unordered_map<int, classType>& map);
@@ -36,10 +46,11 @@ public:
 	template <typename classType>
 	void editObjectById(unordered_map<int, classType>& map);
 
-	template <typename classType>
-	vector<int> search(unordered_map<int, classType>& map);
+	//template <typename classType>
+	//	vector<int> search(unordered_map<int, classType>& map);
 
 	template <typename classType>
+
 	void filtration(unordered_map<int, classType>& map, vector<int> vectorID);
 private:
 };
@@ -49,33 +60,35 @@ inline void Network::outputMap(unordered_map<int, classType>& map)
 {
 	if (map.size()) {
 		for (auto& item : map) {
-			cout << "\nID: " << item.first;
+			std::cout << "\nID: " << item.first;
 			item.second.output();
 		}
 	}
 }
 
-template<typename classType>
-inline void Network::deleting(unordered_map<int, classType>& map) {
-	Network::outputMap(map);
-	cout << "\nInput ID(s) or 0 to exit\n";
-	
-	int choice;
-	do {
-		choice = choose(classType::id);
-		if (choice == 0)
-			break;
-		if (map.count(choice))
-			map.erase(choice);
-		else
-			cout << "Out of map\n";
-	} while (choice != 0);
-}
+//template<typename classType>
+//inline void Network::deleting(unordered_map<int, classType>& map) {
+//	Network::outputMap(map);
+//	std::cout << "\nInput ID(s) or 0 to exit\n";
+//	
+//	int choice;
+//	do {
+//		choice = choose(classType::id);
+//		if (choice == 0)
+//			break;
+//		if (map.count(choice))
+//			map.erase(choice);
+//		else
+//			std::cout << "Out of map\n";
+//	} while (choice != 0);
+//}
+
+
 
 template<typename classType>
 inline void Network::editing(unordered_map<int, classType>& map) {
 	Network::outputMap(map);
-	cout << "\nInput ID(s) or 0 to continue\n";
+	std::cout << "\nInput ID(s) or 0 to continue\n";
 
 	set<int> setID;
 	int choice;
@@ -86,11 +99,11 @@ inline void Network::editing(unordered_map<int, classType>& map) {
 		if (map.count(choice))
 			setID.insert(choice);
 		else
-			cout << "Out of map\n";
+			std::cout << "Out of map\n";
 	} while (choice != 0);
 	
 	for (int i : setID) {
-		cout << "\nID: " << i;
+		std::cout << "\nID: " << i;
 		map[i].edit();
 	}
 }
@@ -99,28 +112,28 @@ template<typename classType>
 inline void Network::editObjectById(unordered_map<int, classType>& map) {
 	Network::outputMap(map);
 	if (map.size()) {
-		cout << "\ninput id\n";
+		std::cout << "\ninput id\n";
 		int tempID = choose(classType::id);
 		if (map.count(tempID)) {
 			map[tempID].edit();
 		}
 		else {
-			cout << "\nWrong id\n";
+			std::cout << "\nWrong id\n";
 		}
 	}
 }
 
-template<typename classType>
+/*template<typename classType>
 inline vector<int> Network::search(unordered_map<int, classType>& map)
 {
 	vector<int> vectorID;
 	if (map.size() == 0) {
-		cout << "Map is empty";
+		std::cout << "Map is empty";
 		return vectorID;
 	}
 
 	if (typeid(classType) == typeid(Pipe)) {
-		cout << "\nSearch by:\n1) name\n2) is working?\n0) Exit\n";
+		std::cout << "\nSearch by:\n1) name\n2) is working?\n0) Exit\n";
 
 		string name;
 		bool isWorking;
@@ -129,7 +142,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		case 0:
 			return vectorID;
 		case 1:
-			cout << "\nInput name:\n";
+			std::cout << "\nInput name:\n";
 			cin >> name;
 			for (auto& item : pipesMap) {
 				if (item.second.name == name) {
@@ -138,7 +151,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			}
 			break;
 		case 2:
-			cout << "\nIs working?\n0) No\n1) Yes\n";
+			std::cout << "\nIs working?\n0) No\n1) Yes\n";
 			isWorking = choose(1);
 			for (auto& item : pipesMap)
 				if (item.second.isWorking == isWorking)
@@ -147,13 +160,13 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		default:
 			break;
 		}
-		cout << "\nID: ";
+		std::cout << "\nID: ";
 		for (int i : vectorID)
-			cout << i << "  ";
-		cout << "\n";
+			std::cout << i << "  ";
+		std::cout << "\n";
 	}
 	else {
-		cout << "\nSearch by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
+		std::cout << "\nSearch by:\n1) name\n2) percent of non working stations?\n0) Exit\n";
 
 		string name;
 		double percentOfWorkshops;
@@ -162,7 +175,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		case 0:
 			return vectorID;
 		case 1:
-			cout << "\nInput name:\n";
+			std::cout << "\nInput name:\n";
 			cin >> name;
 			for (auto& item : stationsMap) {
 				if (item.second.name == name) {
@@ -171,7 +184,7 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			}
 			break;
 		case 2:
-			cout << "\nInput percent of non working stations or 0 to exit\n";
+			std::cout << "\nInput percent of non working stations or 0 to exit\n";
 			do
 			{
 				percentOfWorkshops = inputDouble();
@@ -179,13 +192,13 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 			if (percentOfWorkshops == 0)
 				return vectorID;
 
-			cout << "\n1) less\n2) more\n0) exit\n";
+			std::cout << "\n1) less\n2) more\n0) exit\n";
 			switch (choose(2)) {
 			case 0:
 				return vectorID;
 			case 1:
 				for (auto& item : stationsMap) {
-					cout << (1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0;
+					std::cout << (1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0;
 					if ((1.0 * item.second.numberOfWorkingWorkshops / (1.0 * item.second.numberOfWorkshops)) * 100.0 < percentOfWorkshops)
 						vectorID.push_back(item.first);
 				}
@@ -200,44 +213,47 @@ inline vector<int> Network::search(unordered_map<int, classType>& map)
 		default:
 			break;
 		}
-		cout << "\nID: ";
+		std::cout << "\nID: ";
 		for (int i : vectorID)
-			cout << i << "  ";
-		cout << "\n";
+			std::cout << i << "  ";
+		std::cout << "\n";
 	}
 	return vectorID;
 
 }
+*/
 
 template<typename classType>
 inline void Network::filtration(unordered_map<int, classType>& map, vector<int> vectorID)
 {
+
 	if (!vectorID.size()) {
 		return;
 	}
+
 	for (int i : vectorID)
 	{
-		cout << "\nID: " << i;
+		std::cout << "\nID: " << i;
 		map[i].output();
 	}
 
-	cout << "\nDo you want to change them (it)?\n0) No\n1) Yes\n";
+	std::cout << "\nDo you want to change them (it)?\n0) No\n1) Yes\n";
 	if (!choose(1)) {
 		return;
 	}
 	
-	cout << "\nEdit all or set of objects?\n0) all\n1) set\n";
+	std::cout << "\nEdit all or set of objects?\n0) all\n1) set\n";
 
 	switch (choose(1)) {
 	case 0:
 		for (int id : vectorID) {
 			map[id].edit();
-			cout << "ID: " << id;
+			std::cout << "ID: " << id;
 			map[id].output();
 		}
 		break;
 	case 1:
-		cout << "\nInput id(s), which you want to change or 0 to exit\n";
+		std::cout << "\nInput id(s), which you want to change or 0 to exit\n";
 
 		set<int> setOfChangeable;
 		int choice;
@@ -249,11 +265,11 @@ inline void Network::filtration(unordered_map<int, classType>& map, vector<int> 
 			if (find(vectorID.begin(), vectorID.end(), choice) != vectorID.end())
 				setOfChangeable.insert(choice);
 			else
-				cout << "Out of set\n";
+				std::cout << "Out of set\n";
 		} while (choice != 0);
 		for (int id : setOfChangeable) {
 			map[id].edit();
-			cout << "ID: " << id;
+			std::cout << "ID: " << id;
 			map[id].output();
 		}
 		break;

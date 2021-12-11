@@ -11,34 +11,34 @@ Station::Station()
 
     id++;
 
-    cout << "Adding Station\n";
+    std::cout << "Adding Station\n";
 
-    cout << "Input name:\n";
+    std::cout << "Input name:\n";
     cin >> name;
 
-    cout << "Input number of workshops:\n";
+    std::cout << "Input number of workshops:\n";
     numberOfWorkshops = 0;
     while (numberOfWorkshops <= 0) {
         numberOfWorkshops = inputInteger();
     }
 
-    cout << "Input number of working workshops:\n";
+    std::cout << "Input number of working workshops:\n";
     numberOfWorkingWorkshops = -1;
     while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops) {
         numberOfWorkingWorkshops = inputInteger();
         if (numberOfWorkingWorkshops > numberOfWorkshops) {
-            cout << "Wrong input\n";
-            cout << "Try again:\n";
+            std::cout << "Wrong input\n";
+            std::cout << "Try again:\n";
         }
     }
 
-    cout << "Input Efficiency (0 < e <= 100):\n";
+    std::cout << "Input Efficiency (0 < e <= 100):\n";
     efficiency = 0;
     while (efficiency <= 0 || efficiency > 100) {
         efficiency = inputInteger();
         if (efficiency <= 0 || efficiency > 100) {
-            cout << "Wrong input\n";
-            cout << "Try again:\n";
+            std::cout << "Wrong input\n";
+            std::cout << "Try again:\n";
         };
     }
 }
@@ -55,17 +55,19 @@ Station::~Station()
 }
 
 void Station::output() {
-    cout << "\nStation:";
-    cout << "\nname: " << name;
-    cout << "\nnumber of workshops: " << numberOfWorkshops;
-    cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
-    cout << "\nEfficiency: " << efficiency << "\n";
+    std::cout << "\nStation:";
+    std::cout << "\nname: " << name;
+    std::cout << "\nnumber of workshops: " << numberOfWorkshops;
+    std::cout << "\nnumber of working workshops: " << numberOfWorkingWorkshops;
+    std::cout << "\nnumber of in pipes: " << numberOfInPipes;
+    std::cout << "\nnumber of out pipes: " << numberOfOutPipes;
+    std::cout << "\nEfficiency: " << efficiency << "\n";
 }
 
 void Station::edit() {
-    cout << "\nEditing station";
+    std::cout << "\nEditing station";
     Station::output();
-    cout << "\nInput number of working workshops:\n";
+    std::cout << "\nInput number of working workshops:\n";
     do {
         numberOfWorkingWorkshops = choose(numberOfWorkshops);
     } while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops);

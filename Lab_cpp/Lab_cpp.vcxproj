@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="additionalFunctions.h" />
+    <ClInclude Include="stationsPair.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Station.h" />
