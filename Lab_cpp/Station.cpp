@@ -6,42 +6,7 @@
 
 using namespace std;
 
-Station::Station()
-{
-
-    id++;
-
-    std::cout << "Adding Station\n";
-
-    std::cout << "Input name:\n";
-    cin >> name;
-
-    std::cout << "Input number of workshops:\n";
-    numberOfWorkshops = 0;
-    while (numberOfWorkshops <= 0) {
-        numberOfWorkshops = inputInteger();
-    }
-
-    std::cout << "Input number of working workshops:\n";
-    numberOfWorkingWorkshops = -1;
-    while (numberOfWorkingWorkshops < 0 || numberOfWorkingWorkshops > numberOfWorkshops) {
-        numberOfWorkingWorkshops = inputInteger();
-        if (numberOfWorkingWorkshops > numberOfWorkshops) {
-            std::cout << "Wrong input\n";
-            std::cout << "Try again:\n";
-        }
-    }
-
-    std::cout << "Input Efficiency (0 < e <= 100):\n";
-    efficiency = 0;
-    while (efficiency <= 0 || efficiency > 100) {
-        efficiency = inputInteger();
-        if (efficiency <= 0 || efficiency > 100) {
-            std::cout << "Wrong input\n";
-            std::cout << "Try again:\n";
-        };
-    }
-}
+Station::Station() {}
 
 Station::Station(string name, int numberOfWorkshops, int numberOfWorkingWorkshops, int efficiency) {
     this->name = name;

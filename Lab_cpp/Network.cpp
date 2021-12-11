@@ -5,12 +5,9 @@ void Network::output() {
     Network::outputMap(stationsMap);
 }
 
-void Network::save() {
+void Network::save(std::string fileName) {
     ofstream file;
 
-    std::cout << "Input File name\n";
-    string fileName;
-    cin >> fileName;
     fileName += ".txt";
 
     file.open(fileName);
@@ -46,12 +43,9 @@ void Network::save() {
 
 }
 
-void Network::load() {
+void Network::load(std::string fileName) {
     ifstream file;
 
-    std::cout << "Input File name:\n";
-    string fileName;
-    cin >> fileName;
     fileName += ".txt";
     file.open(fileName);
     if (file.good()) {
@@ -64,8 +58,8 @@ void Network::load() {
 
         while (!file.eof()) {
 
-            Pipe pipe = Pipe("-1", -1, -1, 0);
-            Station station = Station("-1", -1, -1, -1);
+            Pipe pipe = Pipe();
+            Station station = Station();
             string type;
             file >> type;
             if (type == "Pipe:") {
@@ -96,7 +90,6 @@ void Network::load() {
                 stationsMap.insert(pair<int, Station>(id, station));
             }
         }
-        std::cout << "Loaded\n";
 
         for (auto& item : pipesMap) {
             if (Pipe::id < item.first)
@@ -107,59 +100,28 @@ void Network::load() {
             if (Station::id < item.first)
                 Station::id = item.first;
         }
+
+        std::cout << "Loaded\n";
     }
     else {
         std::cout << "File not found 404\n";
     }
 }
 
-void Network::connect() {
-    Network::outputMap(pipesMap);
-    std::cout << "\nInput ID of pipe or 0 to exit:\n";
-
-    int pipeID = inputID(pipesMap);
-    if (pipeID == 0)
+void Network::connect(std::tuple<int, int, int> pipeIdStartIDEndId) {
+    if (std::get<0>(pipeIdStartIDEndId) == -1)
         return;
-    if (pipesMap[pipeID].startID != 0) {
-        std::cout << "Pipe is connected" << std::endl;
-        return;
-    }
 
-    Network::outputMap(stationsMap);
-    std::cout << "\n\nInput ID of start station or 0 to exit:\n";
-
-    int startID = inputID(stationsMap);
-    if (startID == 0)
-        return;
-    if (stationsMap[startID].numberOfWorkshops <= (stationsMap[startID].numberOfInPipes + stationsMap[startID].numberOfOutPipes)) {
-        std::cout << "All workshops are using";
-        return;
-    }
-
-    std::cout << "\nInput ID of end station or 0 to exit:\n";
-
-    int endID = inputID(stationsMap);
-    if (endID == 0)
-        return;
-    if (endID == startID) {
-        std::cout << "Start station and end station can't match\n";
-        return;
-    }
-    if (stationsMap[endID].numberOfWorkshops <= (stationsMap[startID].numberOfInPipes + stationsMap[startID].numberOfOutPipes)) {
-        std::cout << "All workshops are using";
-        return;
-    }
-
-    stationsMap[startID].numberOfOutPipes++;
-    stationsMap[endID].numberOfInPipes++;
-
-
-    pipesMap[pipeID].startID = startID;
-    pipesMap[pipeID].endID = endID;
+    // Pipeid
+    stationsMap[std::get<1>(pipeIdStartIDEndId)].numberOfOutPipes++;
+    stationsMap[std::get<2>(pipeIdStartIDEndId)].numberOfInPipes++;
+    
+    pipesMap[std::get<0>(pipeIdStartIDEndId)].startID = std::get<1>(pipeIdStartIDEndId);
+    pipesMap[std::get<0>(pipeIdStartIDEndId)].endID = std::get<2>(pipeIdStartIDEndId);
 }
 
-void Network::disconnect() {
-    int pipeID = inputID(pipesMap);
+void Network::disconnect(int pipeID) {
+    //int pipeID = inputID(pipesMap);
     if (pipesMap[pipeID].startID != 0) {
         stationsMap[pipesMap[pipeID].startID].numberOfInPipes--;
         stationsMap[pipesMap[pipeID].endID].numberOfOutPipes--;
@@ -168,54 +130,6 @@ void Network::disconnect() {
         std::cout << "Pipe is disconnected";
     }
 }
-/*
-void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap) {
-    vector<int> queue;
-    unordered_map<int, int> pairIDAndTopologicNumber;
-    int topologicNumber = 0;
-    
-    for (auto& item : stationsMap)
-        if (item.second.numberOfInPipes == 0) {
-            queue.push_back(item.first);
-            item.second.numberOfInPipes--;
-        }
-
-    for (int i : queue) {
-        std::cout << "zxc: " << i << endl;
-    }
-
-    while (queue.size() != 0) {
-        
-        for (int i : queue) {
-            pairIDAndTopologicNumber[i] = ++topologicNumber;
-        }
-
-        for (int i : queue) {
-            for (auto item : pipesMap) {
-                if (item.second.startID == i)
-                    item.second.startID = 0;
-            }
-        }
-        // queue keep IDs of stations
-        
-
-
-        queue.clear();
-
-        for (auto& item : stationsMap)
-            if (item.second.numberOfInPipes == 0)
-                queue.push_back(item.first);
-    } 
-
-    std::cout << queue.size();
-
-
-    for (auto& item : pairIDAndTopologicNumber) {
-        std::cout << "item first: " << item.first << endl;
-        std::cout << "item second: " << item.second << endl;
-    }
-}
-*/
 
 void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap) {
     int topologicalID = 0;
@@ -345,40 +259,28 @@ vector<int> Network::search(unordered_map<int, Station>& map) {
     return vectorID;
 }
 
-void Network::deleting(unordered_map<int, Pipe>& map) {
-    Network::outputMap(map);
-	std::cout << "\nInput ID(s) or 0 to exit\n";
-	
-	int choice;
-	do {
-		choice = choose(Pipe::id);
-		if (choice == 0)
-			break;
-		if (map.count(choice))
-            if (map[choice].startID != 0) {
-                map.erase(choice);
-            }
-            else {
-                std::cout << "Pipes is connected\n";
-            }
-		else
-			std::cout << "Out of map\n";
-	} while (choice != 0);
+void Network::deleting(set<int> setOfIDs, unordered_map<int, Pipe>& map) {
+    for (int i : setOfIDs) {
+        if (map[i].startID != 0) {
+            std::cout << "\nPipes is connected" << std::endl;
+            return;
+        }
+        if (map.count(i)) {
+            map.erase(i);
+        }
+        else {
+            std::cout << "\nObject with ID " << i << " doesn't exist!" << std::endl;
+        }
+    }
 }
 
-void Network::deleting(unordered_map<int, Station>& map) {
-    Network::outputMap(map);
-    std::cout << "\nInput ID(s) or 0 to exit\n";
-
-    int choice;
-    do {
-        choice = choose(Pipe::id);
-        if (choice == 0)
-            break;
-        if (map.count(choice)) {
-            map.erase(choice);
+void Network::deleting(set<int> setOfIDs, unordered_map<int, Station>& map) {
+    for (int i : setOfIDs) {
+        if (map.count(i)) {
+            map.erase(i);
         }
-        else
-            std::cout << "Out of map\n";
-    } while (choice != 0);
+        else {
+            std::cout << "\nObject with ID " << i << " doesn't exist!" << std::endl;
+        }
+    }
 }

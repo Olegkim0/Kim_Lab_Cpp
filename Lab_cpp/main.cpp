@@ -1,5 +1,6 @@
 #pragma once
 #include "Network.h"
+#include "Menu.h"
 
 using namespace std;
 
@@ -8,6 +9,7 @@ int Station::id = 0;
 
 int main()
 {
+    Menu menu;
     Network net;
 
     while (true) {
@@ -17,27 +19,29 @@ int main()
             std::cout << "\nExit\n";
             return 0;
         case 1:
-            net.pipesMap.insert(pair<int, Pipe>(Pipe::id, Pipe()));
+            net.pipesMap.insert({Pipe::id, menu.addPipe()});
             break;
         case 2:
-            net.stationsMap.insert(pair<int, Station>(Station::id, Station()));
+            net.stationsMap.insert({Station::id, menu.addStation()});
             break;
         case 3:
-            net.output();
+            menu.output(net.pipesMap, net.stationsMap);
             break;
         case 4:
-            net.editing(net.pipesMap);
-            //net.editObjectById(net.pipesMap);
+            menu.outputMap(net.pipesMap);
+            net.editing(menu.getIDs(Pipe::id), net.pipesMap);
             break;
         case 5:
-            net.editing(net.stationsMap);
-            //net.editObjectById(net.stationsMap);
+            menu.outputMap(net.stationsMap);
+            net.editing(menu.getIDs(Station::id), net.stationsMap);
             break;
         case 6:
-            net.deleting(net.pipesMap);
+            menu.outputMap(net.pipesMap);
+            net.deleting(menu.getIDs(Pipe::id), net.pipesMap);
             break;
         case 7:
-            net.deleting(net.stationsMap);
+            menu.outputMap(net.stationsMap);
+            net.deleting(menu.getIDs(Station::id), net.stationsMap);
             break;
         case 8:
             net.filtration(net.pipesMap, net.search(net.pipesMap));
@@ -46,16 +50,16 @@ int main()
             net.filtration(net.stationsMap, net.search(net.stationsMap));
             break;
         case 10:
-            net.save();
+            net.save(menu.getStr());
             break;
         case 11:
-            net.load();
+            net.load(menu.getStr());
             break;
         case 12:
-            net.connect();
+            net.connect(menu.getIDsForConnect(net.pipesMap, net.stationsMap));
             break;
         case 13:
-            net.disconnect();
+            //net.disconnect();
             break;
         case 14:
             net.topologicalSort(net.pipesMap, net.stationsMap);

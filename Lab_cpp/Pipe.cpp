@@ -4,29 +4,7 @@
 #include <unordered_map>
 
 using namespace std;
-
-Pipe::Pipe()
-{
-    id++;
-    std::cout << "Adding Pipe\n";
-    std::cout << "Input name:\n";
-
-    cin >> name;
-
-    std::cout << "Input diameter:\n";
-    diameter = 0;
-    while (diameter <= 0) {
-        diameter = inputInteger();
-    }
-
-    std::cout << "Input length:\n";
-    length = 0;
-    while (length <= 0) {
-        length = inputDouble();
-    }
-
-    isWorking = true;
-}
+Pipe::Pipe() {}
 
 Pipe::Pipe(string name, int diameter, double length, bool isWorking)
 {

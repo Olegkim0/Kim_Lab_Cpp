@@ -19,13 +19,13 @@ public:
 	
 	void output();
 
-	void save();
+	void save(std::string fileName);
 
-	void load();
+	void load(std::string fileName);
 
-	void connect();
+	void connect(std::tuple<int, int, int> pipeIdStartIDEndId);
 
-	void disconnect();
+	void disconnect(int pipeID);
 
 	void topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap);
 
@@ -33,15 +33,15 @@ public:
 
 	vector<int> search(unordered_map<int, Station>& map);
 
-	void deleting(unordered_map<int, Pipe>& map);
+	void deleting(set<int> setOfIDs, unordered_map<int, Pipe>& map);
 
-	void deleting(unordered_map<int, Station>& map);
+	void deleting(set<int> setOfIDs, unordered_map<int, Station>& map);
 
 	//template <typename classType>
 	//void deleting(unordered_map<int, classType>& map);
 
 	template <typename classType>
-	void editing(unordered_map<int, classType>& map);
+	void editing(set<int> setOfIDs, unordered_map<int, classType>& map);
 
 	template <typename classType>
 	void editObjectById(unordered_map<int, classType>& map);
@@ -83,27 +83,9 @@ inline void Network::outputMap(unordered_map<int, classType>& map)
 //	} while (choice != 0);
 //}
 
-
-
 template<typename classType>
-inline void Network::editing(unordered_map<int, classType>& map) {
-	Network::outputMap(map);
-	std::cout << "\nInput ID(s) or 0 to continue\n";
-
-	set<int> setID;
-	int choice;
-	do {
-		choice = choose(classType::id);
-		if (choice == 0)
-			break;
-		if (map.count(choice))
-			setID.insert(choice);
-		else
-			std::cout << "Out of map\n";
-	} while (choice != 0);
-	
-	for (int i : setID) {
-		std::cout << "\nID: " << i;
+inline void Network::editing(set<int> setOfIDs, unordered_map<int, classType>& map) {
+	for (int i : setOfIDs) {
 		map[i].edit();
 	}
 }
