@@ -120,14 +120,16 @@ void Network::connect(std::tuple<int, int, int> pipeIdStartIDEndId) {
     pipesMap[std::get<0>(pipeIdStartIDEndId)].endID = std::get<2>(pipeIdStartIDEndId);
 }
 
-void Network::disconnect(int pipeID) {
+void Network::disconnect(set<int> setOfIDs) {
     //int pipeID = inputID(pipesMap);
-    if (pipesMap[pipeID].startID != 0) {
-        stationsMap[pipesMap[pipeID].startID].numberOfInPipes--;
-        stationsMap[pipesMap[pipeID].endID].numberOfOutPipes--;
-        pipesMap[pipeID].startID = 0;
-        pipesMap[pipeID].endID = 0;
-        std::cout << "Pipe is disconnected";
+    for (int pipeID : setOfIDs) {
+        if (pipesMap[pipeID].startID != 0) {
+            stationsMap[pipesMap[pipeID].startID].numberOfInPipes--;
+            stationsMap[pipesMap[pipeID].endID].numberOfOutPipes--;
+            pipesMap[pipeID].startID = 0;
+            pipesMap[pipeID].endID = 0;
+            std::cout << "Pipe with id " << pipeID << " is disconnected";
+        }
     }
 }
 

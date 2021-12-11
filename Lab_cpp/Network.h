@@ -25,7 +25,7 @@ public:
 
 	void connect(std::tuple<int, int, int> pipeIdStartIDEndId);
 
-	void disconnect(int pipeID);
+	void disconnect(set<int> setOfIDs);
 
 	void topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap);
 

@@ -13,11 +13,11 @@ void printMenu() {
     std::cout << "7. Delete station\n";
     std::cout << "8. Search (and filter) pipes\n";
     std::cout << "9. Search (and filter) stations\n";
-    std::cout << "10. Save\n";
-    std::cout << "11. Load\n";
-    std::cout << "12. Connect pipe\n";
-    std::cout << "13. Disconnect pipe\n";
-    std::cout << "14. Topological sort\n";
+    std::cout << "10. Connect pipe\n";
+    std::cout << "11. Disconnect pipe\n";
+    std::cout << "12. Topological sort\n";
+    std::cout << "13. Save\n";
+    std::cout << "14. Load\n";
     std::cout << "0. Exit\n\n";
 }
 

@@ -20,7 +20,7 @@ double inputDouble();
 int choose(int number);
 
 template <typename classType>
-int inputID(unordered_map<int, classType>& map) {
+int inputID(unordered_map<int, classType>& map)  {
     int choice = choose(classType::id);
     if (choice == 0)
         return 0;

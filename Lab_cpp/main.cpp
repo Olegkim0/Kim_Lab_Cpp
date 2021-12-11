@@ -50,19 +50,19 @@ int main()
             net.filtration(net.stationsMap, net.search(net.stationsMap));
             break;
         case 10:
-            net.save(menu.getStr());
-            break;
-        case 11:
-            net.load(menu.getStr());
-            break;
-        case 12:
             net.connect(menu.getIDsForConnect(net.pipesMap, net.stationsMap));
             break;
+        case 11:
+            net.disconnect(menu.getIDs(Pipe::id));
+            break;
+        case 12:
+            net.topologicalSort(net.pipesMap, net.stationsMap);
+            break;
         case 13:
-            //net.disconnect();
+            net.save(menu.getStr());
             break;
         case 14:
-            net.topologicalSort(net.pipesMap, net.stationsMap);
+            net.load(menu.getStr());
         default:
             break;
         }
