@@ -120,6 +120,10 @@ void Network::connect() {
     int pipeID = inputID(pipesMap);
     if (pipeID == 0)
         return;
+    if (pipesMap[pipeID].startID != 0) {
+        std::cout << "Pipe is connected" << std::endl;
+        return;
+    }
 
     Network::outputMap(stationsMap);
     std::cout << "\n\nInput ID of start station or 0 to exit:\n";
@@ -137,6 +141,10 @@ void Network::connect() {
     int endID = inputID(stationsMap);
     if (endID == 0)
         return;
+    if (endID == startID) {
+        std::cout << "Start station and end station can't match\n";
+        return;
+    }
     if (stationsMap[endID].numberOfWorkshops <= (stationsMap[startID].numberOfInPipes + stationsMap[startID].numberOfOutPipes)) {
         std::cout << "All workshops are using";
         return;
