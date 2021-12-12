@@ -73,8 +73,14 @@ void Menu::output(unordered_map<int, Pipe>& pipesMap, unordered_map<int, Station
 
 set<int> Menu::getIDs(int maxID)
 {
-    std::cout << "\nInput Id's or 0 to exit" << std::endl;
     set<int> setOfIDs;
+    
+    if (maxID == 0) {
+        std::cout << "No objects" << std::endl;
+        return setOfIDs;
+    }
+    
+    std::cout << "\nInput Id's or 0 to exit" << std::endl;
     int choice;
     do {
         choice = choose(maxID);
@@ -98,6 +104,16 @@ std::string Menu::getStr()
 
 std::tuple<int, int, int> Menu::getIDsForConnect(unordered_map<int, Pipe>& pipesMap, unordered_map<int, Station>& stationsMap)
 {
+    if (pipesMap.size() == 0) {
+        std::cout << "No pipes" << std::endl;
+        return { -1, -1, -1 };
+    }
+
+    if (stationsMap.size() == 0) {
+        std::cout << "No stations" << std::endl;
+        return { -1, -1, -1 };
+    }
+
     std::cout << "\nInput ID of pipe or 0 to exit:\n";
 
     int pipeID = inputID(stationsMap);

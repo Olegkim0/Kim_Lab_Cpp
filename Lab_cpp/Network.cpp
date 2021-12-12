@@ -109,24 +109,22 @@ void Network::load(std::string fileName) {
 }
 
 void Network::connect(std::tuple<int, int, int> pipeIdStartIDEndId) {
-    if (std::get<0>(pipeIdStartIDEndId) == -1)
-        return;
+    if (std::get<0>(pipeIdStartIDEndId) != -1) {
 
-    // Pipeid
     stationsMap[std::get<1>(pipeIdStartIDEndId)].numberOfOutPipes++;
     stationsMap[std::get<2>(pipeIdStartIDEndId)].numberOfInPipes++;
     
     pipesMap[std::get<0>(pipeIdStartIDEndId)].startID = std::get<1>(pipeIdStartIDEndId);
     pipesMap[std::get<0>(pipeIdStartIDEndId)].endID = std::get<2>(pipeIdStartIDEndId);
+    }
 }
 
 void Network::disconnect(set<int> setOfIDs) {
-    //int pipeID = inputID(pipesMap);
     for (int pipeID : setOfIDs) {
         if (pipesMap[pipeID].startID != 0) {
-            stationsMap[pipesMap[pipeID].startID].numberOfInPipes--;
-            stationsMap[pipesMap[pipeID].endID].numberOfOutPipes--;
-            pipesMap[pipeID].startID = 0;
+            stationsMap[pipesMap[pipeID].startID].numberOfOutPipes--;
+            stationsMap[pipesMap[pipeID].endID].numberOfInPipes--;
+            pipesMap[pipeID].startID = 0; 
             pipesMap[pipeID].endID = 0;
             std::cout << "Pipe with id " << pipeID << " is disconnected";
         }
@@ -135,25 +133,34 @@ void Network::disconnect(set<int> setOfIDs) {
 
 void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap) {
     int topologicalID = 0;
-    unordered_map<int, int> pairOfIDAndTopologicalNumber;
+    map<int, int> pairOfIDAndTopologicalNumber;
+    set<int> queue;
+
     while (pairOfIDAndTopologicalNumber.size() != stationsMap.size()) {
         for (auto& station : stationsMap) {
             if (station.second.numberOfInPipes == 0) {
-                pairOfIDAndTopologicalNumber.insert({ station.first, ++topologicalID });
+                queue.insert(station.first);
+                std::cout << "\nID: " << station.first << std::endl;
+            }
+        }
 
-                // Change stations and pipes
-                stationsMap[station.first].numberOfInPipes--;
-                for (auto& pipe : pipesMap) {
-                    if (pipe.second.startID == station.first) {
-                        stationsMap[pipe.second.endID].numberOfInPipes--;
-                    }
+        for (int i : queue) {
+            pairOfIDAndTopologicalNumber.insert({ ++topologicalID, i});
+            std::cout << "top ID: " << topologicalID << std::endl;
+
+            // Change stations and pipes
+            stationsMap[i].numberOfInPipes--;
+            for (auto& pipe : pipesMap) {
+                if (pipe.second.startID == i) {
+                    stationsMap[pipe.second.endID].numberOfInPipes--;
                 }
             }
         }
+        queue.clear();
     }
+
     for (auto item : pairOfIDAndTopologicalNumber) {
-        std::cout << "ID: " << item.first << std::endl;
-        std::cout << "Topological ID: " << item.second << std::endl;
+        std::cout << "Topological ID - station ID:   " << item.first << " - " << item.second << std::endl;
     }
 }
 
