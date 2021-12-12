@@ -140,14 +140,11 @@ void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<i
         for (auto& station : stationsMap) {
             if (station.second.numberOfInPipes == 0) {
                 queue.insert(station.first);
-                std::cout << "\nID: " << station.first << std::endl;
             }
         }
 
         for (int i : queue) {
             pairOfIDAndTopologicalNumber.insert({ ++topologicalID, i});
-            std::cout << "top ID: " << topologicalID << std::endl;
-
             // Change stations and pipes
             stationsMap[i].numberOfInPipes--;
             for (auto& pipe : pipesMap) {
