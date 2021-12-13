@@ -23,7 +23,7 @@ public:
 
 	void load(std::string fileName);
 
-	void connect(std::tuple<int, int, int> pipeIdStartIDEndId);
+	void connect(const std::tuple<int, int, int> pipeIdStartIDEndId);
 
 	void disconnect(set<int> setOfIDs);
 
@@ -36,6 +36,9 @@ public:
 	void deleting(set<int> setOfIDs, unordered_map<int, Pipe>& map);
 
 	void deleting(set<int> setOfIDs, unordered_map<int, Station>& map);
+
+	template <typename classType>
+	bool existByID(const unordered_map<int, classType>& map, const int ID);
 
 	//template <typename classType>
 	//void deleting(unordered_map<int, classType>& map);
@@ -50,7 +53,6 @@ public:
 	//	vector<int> search(unordered_map<int, classType>& map);
 
 	template <typename classType>
-
 	void filtration(unordered_map<int, classType>& map, vector<int> vectorID);
 private:
 };
@@ -82,6 +84,12 @@ inline void Network::outputMap(unordered_map<int, classType>& map)
 //			std::cout << "Out of map\n";
 //	} while (choice != 0);
 //}
+
+template<typename classType>
+inline bool Network::existByID(const unordered_map<int, classType>& map, const int ID)
+{
+	return map.count(ID);
+}
 
 template<typename classType>
 inline void Network::editing(set<int> setOfIDs, unordered_map<int, classType>& map) {

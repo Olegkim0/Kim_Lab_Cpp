@@ -116,9 +116,9 @@ std::tuple<int, int, int> Menu::getIDsForConnect(unordered_map<int, Pipe>& pipes
 
     std::cout << "\nInput ID of pipe or 0 to exit:\n";
 
-    int pipeID = inputID(stationsMap);
+    int pipeID = inputID(pipesMap);
     if (pipeID == 0)
-        return {-1, -1, -1};
+        return { -1, -1, -1 };
     if (pipesMap[pipeID].startID != 0) {
         std::cout << "Pipe is connected" << std::endl;
         return { -1, -1, -1 };

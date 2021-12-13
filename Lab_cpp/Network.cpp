@@ -1,4 +1,5 @@
 #include "Network.h"
+#include <unordered_set>
 
 void Network::output() {
     Network::outputMap(pipesMap);
@@ -108,20 +109,23 @@ void Network::load(std::string fileName) {
     }
 }
 
-void Network::connect(std::tuple<int, int, int> pipeIdStartIDEndId) {
-    if (std::get<0>(pipeIdStartIDEndId) != -1) {
-
-    stationsMap[std::get<1>(pipeIdStartIDEndId)].numberOfOutPipes++;
-    stationsMap[std::get<2>(pipeIdStartIDEndId)].numberOfInPipes++;
+void Network::connect(const std::tuple<int, int, int> pipeIdStartIDEndId) {
+    if (existByID(pipesMap, std::get<0>(pipeIdStartIDEndId)) && 
+        existByID(stationsMap, std::get<1>(pipeIdStartIDEndId)) &&
+        existByID(stationsMap, std::get<2>(pipeIdStartIDEndId)) &&
+        std::get<0>(pipeIdStartIDEndId) != -1) 
+    {
+        stationsMap[std::get<1>(pipeIdStartIDEndId)].numberOfOutPipes++;
+        stationsMap[std::get<2>(pipeIdStartIDEndId)].numberOfInPipes++;
     
-    pipesMap[std::get<0>(pipeIdStartIDEndId)].startID = std::get<1>(pipeIdStartIDEndId);
-    pipesMap[std::get<0>(pipeIdStartIDEndId)].endID = std::get<2>(pipeIdStartIDEndId);
+        pipesMap[std::get<0>(pipeIdStartIDEndId)].startID = std::get<1>(pipeIdStartIDEndId);
+        pipesMap[std::get<0>(pipeIdStartIDEndId)].endID = std::get<2>(pipeIdStartIDEndId);
     }
 }
 
 void Network::disconnect(set<int> setOfIDs) {
     for (int pipeID : setOfIDs) {
-        if (pipesMap[pipeID].startID != 0) {
+        if (existByID(pipesMap, pipeID) && pipesMap[pipeID].startID != 0) {
             stationsMap[pipesMap[pipeID].startID].numberOfOutPipes--;
             stationsMap[pipesMap[pipeID].endID].numberOfInPipes--;
             pipesMap[pipeID].startID = 0; 
@@ -132,14 +136,62 @@ void Network::disconnect(set<int> setOfIDs) {
 }
 
 void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap) {
+
     int topologicalID = 0;
     map<int, int> pairOfIDAndTopologicalNumber;
     set<int> queue;
 
+    do {
+        queue.clear();
+        for (auto& station : stationsMap) {
+            if (station.second.numberOfInPipes == 0) {  // && !checkOnCycle.count(station.first)) {
+                queue.insert(station.first);
+                //checkOnCycle.insert(station.first);
+            }
+        }
+
+        for (int i : queue) {
+            pairOfIDAndTopologicalNumber.insert({ ++topologicalID, i });
+            // Change stations and pipes
+            stationsMap[i].numberOfInPipes--;
+            for (auto& pipe : pipesMap) {
+                if (pipe.second.startID == i) {
+                    stationsMap[pipe.second.endID].numberOfInPipes--;
+                }
+            }
+        }
+    } while (queue.size() != 0);
+
+    if (pairOfIDAndTopologicalNumber.size() != stationsMap.size()) {
+        std::cout << "\nGraph have cycle" << std::endl;
+        return;
+    }
+
+    //if (checkOnCycle.size() > stationsMap.size()) {
+      //  std::cout << "\nGraph have cycle\n";
+        //return;
+    //}
+
+    for (auto item : pairOfIDAndTopologicalNumber) {
+        std::cout << "Topological ID - station ID:   " << item.first << " - " << item.second << std::endl;
+    }
+
+    /*
+    int topologicalID = 0;
+    map<int, int> pairOfIDAndTopologicalNumber;
+    set<int> queue;
+    set<int> checkOnCycle;
+
     while (pairOfIDAndTopologicalNumber.size() != stationsMap.size()) {
         for (auto& station : stationsMap) {
-            if (station.second.numberOfInPipes == 0) {
+            if (station.second.numberOfInPipes == 0 && checkOnCycle.count(station.first)) {
                 queue.insert(station.first);
+                checkOnCycle.insert(station.first);
+            }
+            else
+            {
+                std::cout << "\nGraph have cycle\n";
+                return;
             }
         }
 
@@ -159,6 +211,7 @@ void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<i
     for (auto item : pairOfIDAndTopologicalNumber) {
         std::cout << "Topological ID - station ID:   " << item.first << " - " << item.second << std::endl;
     }
+    */
 }
 
 vector<int> Network::search(unordered_map<int, Pipe>& map) {
@@ -271,9 +324,11 @@ void Network::deleting(set<int> setOfIDs, unordered_map<int, Pipe>& map) {
             std::cout << "\nPipes is connected" << std::endl;
             return;
         }
-        if (map.count(i)) {
+
+        if (existByID(map, i)) {
             map.erase(i);
         }
+
         else {
             std::cout << "\nObject with ID " << i << " doesn't exist!" << std::endl;
         }

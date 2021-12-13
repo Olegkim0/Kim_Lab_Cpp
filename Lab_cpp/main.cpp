@@ -14,7 +14,7 @@ int main()
 
     while (true) {
         printMenu();
-        switch (choose(14)) {
+        switch (choose(15)) {
         case 0:
             std::cout << "\nExit\n";
             return 0;
@@ -63,6 +63,10 @@ int main()
             break;
         case 14:
             net.load(menu.getStr());
+            break;
+        case 15:
+            std::cout << !net.pipesMap.count(1);
+            break;
         default:
             break;
         }
