@@ -3,14 +3,17 @@
 #include "Menu.h"
 
 using namespace std;
-
 int Pipe::id = 0;
 int Station::id = 0;
 
 int main()
 {
+
     Menu menu;
     Network net;
+
+    unordered_map<int, Node> nodesMap;
+    unordered_map<int, Verge> vergesMap;
 
     while (true) {
         printMenu();
@@ -65,7 +68,9 @@ int main()
             net.load(menu.getStr());
             break;
         case 15:
-            std::cout << !net.pipesMap.count(1);
+            nodesMap = net.toNodesMap(net.stationsMap);
+            vergesMap = net.toVergesMap(net.pipesMap);
+            net.dijkstra(nodesMap, vergesMap, 1);
             break;
         default:
             break;

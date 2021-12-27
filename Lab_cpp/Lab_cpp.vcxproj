@@ -142,12 +142,16 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Network.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="additionalFunctions.cpp" />
     <ClCompile Include="Station.cpp" />
+    <ClCompile Include="Verge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="additionalFunctions.h" />
+    <ClInclude Include="Verge.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="stationsPair.h" />
     <ClInclude Include="Network.h" />

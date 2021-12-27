@@ -1,9 +1,29 @@
 #include "Network.h"
 #include <unordered_set>
+#include <iterator>
 
 void Network::output() {
     Network::outputMap(pipesMap);
     Network::outputMap(stationsMap);
+}
+
+unordered_map<int, Node> Network::toNodesMap(const unordered_map<int, Station>& stationsMap) {
+    unordered_map<int, Node> nodesMap;
+
+    for (auto& item : stationsMap) {
+        nodesMap.insert({ item.first, Node(item.second.numberOfInPipes, item.second.numberOfOutPipes, INT_MAX) });
+    }
+
+    return nodesMap;
+}
+
+unordered_map<int, Verge> Network::toVergesMap(const unordered_map<int, Pipe>& pipesMap) {
+    unordered_map<int, Verge> vergeMap;
+    for (auto& item : pipesMap) {
+        vergeMap.insert({ item.first, Verge(item.second.startID, item.second.endID, item.second.length) });
+    }
+
+    return vergeMap;
 }
 
 void Network::save(std::string fileName) {
@@ -138,20 +158,27 @@ void Network::disconnect(set<int> setOfIDs) {
 void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap) {
 
     int topologicalID = 0;
-    map<int, int> pairOfIDAndTopologicalNumber;
+    unordered_map<int, int> pairOfIDAndTopologicalNumber;
     set<int> queue;
+
+    for (auto& station : stationsMap) {
+        if (station.second.numberOfInPipes == 0 && station.second.numberOfOutPipes == 0) {
+            queue.insert(station.first);
+        }
+    }
+    Network::deleting(queue, stationsMap);
 
     do {
         queue.clear();
         for (auto& station : stationsMap) {
-            if (station.second.numberOfInPipes == 0) {  // && !checkOnCycle.count(station.first)) {
+            if (station.second.numberOfInPipes == 0) {
                 queue.insert(station.first);
-                //checkOnCycle.insert(station.first);
             }
         }
 
         for (int i : queue) {
             pairOfIDAndTopologicalNumber.insert({ ++topologicalID, i });
+
             // Change stations and pipes
             stationsMap[i].numberOfInPipes--;
             for (auto& pipe : pipesMap) {
@@ -163,55 +190,52 @@ void Network::topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<i
     } while (queue.size() != 0);
 
     if (pairOfIDAndTopologicalNumber.size() != stationsMap.size()) {
-        std::cout << "\nGraph have cycle" << std::endl;
+        std::cout << "\nTopological sort can't be done for this graph" << std::endl;
         return;
     }
 
-    //if (checkOnCycle.size() > stationsMap.size()) {
-      //  std::cout << "\nGraph have cycle\n";
-        //return;
-    //}
-
     for (auto item : pairOfIDAndTopologicalNumber) {
         std::cout << "Topological ID - station ID:   " << item.first << " - " << item.second << std::endl;
     }
+}
 
-    /*
-    int topologicalID = 0;
-    map<int, int> pairOfIDAndTopologicalNumber;
-    set<int> queue;
-    set<int> checkOnCycle;
+void Network::dijkstra(unordered_map<int, Node> nodesMap, unordered_map<int, Verge> vergeMap, int startID) {
+    set<int> setOfChangableNodes;
 
-    while (pairOfIDAndTopologicalNumber.size() != stationsMap.size()) {
-        for (auto& station : stationsMap) {
-            if (station.second.numberOfInPipes == 0 && checkOnCycle.count(station.first)) {
-                queue.insert(station.first);
-                checkOnCycle.insert(station.first);
-            }
-            else
-            {
-                std::cout << "\nGraph have cycle\n";
-                return;
+    nodesMap[startID].weight = 0;
+
+    for (auto& item : nodesMap) {
+        setOfChangableNodes.insert(item.first);
+    }
+    
+    int workID = startID;
+
+    while (setOfChangableNodes.size() != 0) {
+
+        // change verges
+        for (auto& item : vergeMap) {
+            if (item.second.startID == workID
+                && nodesMap[item.second.startID].weight + item.second.length < nodesMap[item.second.endID].weight) {
+                
+                nodesMap[item.second.endID].weight = nodesMap[item.second.startID].weight + item.second.length;
             }
         }
+        setOfChangableNodes.erase(workID);
 
-        for (int i : queue) {
-            pairOfIDAndTopologicalNumber.insert({ ++topologicalID, i});
-            // Change stations and pipes
-            stationsMap[i].numberOfInPipes--;
-            for (auto& pipe : pipesMap) {
-                if (pipe.second.startID == i) {
-                    stationsMap[pipe.second.endID].numberOfInPipes--;
-                }
+        int min = INT_MAX;
+        // find next node
+        for (int i : setOfChangableNodes) {
+            if (nodesMap[i].weight < min) {
+                min = nodesMap[i].weight;
+                workID = i;
             }
         }
-        queue.clear();
     }
 
-    for (auto item : pairOfIDAndTopologicalNumber) {
-        std::cout << "Topological ID - station ID:   " << item.first << " - " << item.second << std::endl;
+    for (auto& item : nodesMap) {
+        std::cout << "ID: " << item.first << std::endl;
+        std::cout << "Weight: " << item.second.weight << std::endl;
     }
-    */
 }
 
 vector<int> Network::search(unordered_map<int, Pipe>& map) {
@@ -337,11 +361,11 @@ void Network::deleting(set<int> setOfIDs, unordered_map<int, Pipe>& map) {
 
 void Network::deleting(set<int> setOfIDs, unordered_map<int, Station>& map) {
     for (int i : setOfIDs) {
-        if (map.count(i)) {
+        if (map.count(i) && map[i].numberOfInPipes == 0 && map[i].numberOfOutPipes == 0) {
             map.erase(i);
         }
         else {
-            std::cout << "\nObject with ID " << i << " doesn't exist!" << std::endl;
+            std::cout << "\Station with ID " << i << " can't be deleted" << std::endl;
         }
     }
 }

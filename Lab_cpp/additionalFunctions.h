@@ -8,6 +8,8 @@
 #include <fstream>
 #include <set>
 #include <unordered_map>
+#include "Verge.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -18,6 +20,10 @@ int inputInteger();
 double inputDouble();
 
 int choose(int number);
+
+//int findMinVergeLength(unordered_map<int, Verge>& vergeMap);
+
+//int findMinNodeWeight(unordered_map<int, Node>& nodesMap);
 
 template <typename classType>
 int inputID(unordered_map<int, classType>& map)  {

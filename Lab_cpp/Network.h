@@ -6,6 +6,9 @@
 #include <fstream>
 #include "additionalFunctions.h"
 #include <typeinfo>
+#include "Node.h"
+#include "Verge.h"
+
 
 using namespace std;
 
@@ -18,7 +21,11 @@ public:
 	void outputMap(unordered_map<int, classType>& map);
 	
 	void output();
+	
+	unordered_map<int, Node> toNodesMap(const unordered_map<int, Station>& stationsMap);
 
+	unordered_map<int, Verge> toVergesMap(const unordered_map<int, Pipe>& pipesMap);
+	
 	void save(std::string fileName);
 
 	void load(std::string fileName);
@@ -28,6 +35,8 @@ public:
 	void disconnect(set<int> setOfIDs);
 
 	void topologicalSort(unordered_map<int, Pipe> pipesMap, unordered_map<int, Station> stationsMap);
+
+	void dijkstra(unordered_map<int, Node> nodeMap, unordered_map<int, Verge> vergeMap, int startID);
 
 	vector<int> search(unordered_map<int, Pipe>& map);
 
