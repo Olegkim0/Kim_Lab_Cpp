@@ -20,7 +20,7 @@ unordered_map<int, Node> Network::toNodesMap(const unordered_map<int, Station>& 
 unordered_map<int, Verge> Network::toVergesMap(const unordered_map<int, Pipe>& pipesMap) {
     unordered_map<int, Verge> vergeMap;
     for (auto& item : pipesMap) {
-        vergeMap.insert({ item.first, Verge(item.second.startID, item.second.endID, item.second.length) });
+        vergeMap.insert({ item.first, Verge(item.second.startID, item.second.endID, item.second.length, item.second.isWorking) });
     }
 
     return vergeMap;
@@ -211,10 +211,11 @@ void Network::dijkstra(unordered_map<int, Node> nodesMap, unordered_map<int, Ver
     int workID = startID;
 
     while (setOfChangableNodes.size() != 0) {
-
+        
         // change verges
         for (auto& item : vergeMap) {
             if (item.second.startID == workID
+                && item.second.isWorking
                 && nodesMap[item.second.startID].weight + item.second.length < nodesMap[item.second.endID].weight) {
                 
                 nodesMap[item.second.endID].weight = nodesMap[item.second.startID].weight + item.second.length;
@@ -236,6 +237,33 @@ void Network::dijkstra(unordered_map<int, Node> nodesMap, unordered_map<int, Ver
         std::cout << "ID: " << item.first << std::endl;
         std::cout << "Weight: " << item.second.weight << std::endl;
     }
+
+    //for (auto& item : vergeMap) {
+    //    std::cout << "ID: " << item.first << std::endl;
+    //    std::cout << "Start ID: " << item.second.startID << std::endl;
+    //    std::cout << "End ID: " << item.second.endID << std::endl;
+    //    std::cout << "Length: " << item.second.length << std::endl;
+    //    std::cout << std::endl << std::endl;
+    //}
+
+    // Algoritm Posledovatel'nogo vozvrasheniya
+    //int endID = 4;
+    //startID = 1;
+    //int currentID = startID;
+    //
+    //unordered_map<int, Node> possibleNodesMap;
+    //possibleNodesMap.insert({ startID, nodesMap[startID] });
+
+    //for (auto& node : possibleNodesMap) {
+    //    for (auto& verge : vergeMap) {
+    //        if (verge.second.endID == node.first
+    //            && (nodesMap[verge.second.endID].weight - verge.second.length) == nodesMap[verge.second.startID].weight) {
+    //            possibleNodesMap.insert({ node.first, node.second });
+    //        }
+    //        possibleNodesMap.erase(node.first);
+    //    }
+    //}
+
 }
 
 vector<int> Network::search(unordered_map<int, Pipe>& map) {
